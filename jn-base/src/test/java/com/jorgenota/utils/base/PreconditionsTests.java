@@ -97,7 +97,9 @@ public class PreconditionsTests {
 
     @Test
     public void testNotNull() {
-        Preconditions.notNull(new Object(), "enigma");
+        Integer i = new Integer(5);
+        Integer result = Preconditions.notNull(i, "enigma");
+        assertThat(result).isSameAs(i);
     }
 
     @Test
