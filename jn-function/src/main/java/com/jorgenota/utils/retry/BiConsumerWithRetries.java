@@ -2,7 +2,6 @@ package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.BiConsumerWithExceptions;
 
-import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 
 /**
@@ -13,8 +12,6 @@ public abstract class BiConsumerWithRetries<T, U, E extends Exception> extends D
     public final void accept(T t, U u) {
         try {
             getRetrier().accept((BiConsumerWithExceptions<T, U, E>) this::acceptWithRetries, t, u);
-        } catch (ExecutionException e) {
-            getRetryExceptionHandler().handleExecutionException(e);
         } catch (RetryException e) {
             getRetryExceptionHandler().handleRetryException(e);
         }

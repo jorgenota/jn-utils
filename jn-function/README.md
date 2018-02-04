@@ -36,17 +36,21 @@ try {
     defaultRetrier.call(callable);
 } catch (RetryException e) {
     e.printStackTrace();
-} catch (ExecutionException e) {
-    e.printStackTrace();
 }
 ```
-This code is using a default retrier that will retry the callable if its code throws any exception using the default strategies (with no waiting time
-between attempts. It will stop retrying after 10 unsuccessful attempts, throwing a `RetryException`. An
-`ExecutionException` would be thrown in case an unsuccessful attempt matched a configured fail predicate... but
-in this example this won't be the case because no fail predicate has been set when building the
-retrier.
+This code is using a default retrier that will retry the callable if its code throws any 
+exception using the default strategies (with no waiting time
+between attempts. It will stop retrying after 10 unsuccessful attempts, throwing a `RetryException`. A
+`RetryException` can be thrown because of different situations and there are spefic subclasses to address each
+of them:
+* `FailException`: is thrown when the situation matches the fail predicate (see Fail Predicate section) and then
+the retrier aborts the execution.
+* `ExhaustedException`: is thrown after a failed attempt when the stop strategy (see Stop Strategies section)
+decides the retries are exhausted.
+* `SleepInterruptedException`: is thrown in case the thread has been interrupted while waiting (see Wait Strategies)
+after a failed attempt.
 
-You can build a retrier using specific wait strategies, stop strategies and fail predicates. 
+You can build a retrier using specific wait strategies, stop strategies and fail predicates.
 For example: 
 ```Java
 Retrier myRetrier = RetrierBuilder.newBuilder()
@@ -58,16 +62,18 @@ Retrier myRetrier = RetrierBuilder.newBuilder()
 BiFunction<Integer, Integer, String> sumToString = (x, y) -> String.valueOf(x + y);
 try {
     myRetrier.apply(sumToString(4,8));
-} catch (RetryException e) {
+} catch (FailException e) {
     e.printStackTrace();
-} catch (ExecutionException e) {
+} catch (ExhaustedException e) {
+    e.printStackTrace();
+} catch (Exception e) {
     e.printStackTrace();
 }
 ```
 This coce uses a retrier that will retry if the code of the bifunction throws any exception but `NullPointerException`.
 It will wait for 100 milliseconds between retries and will stop retrying after 800 milliseconds
-(after that time without succeding, it will throw a `RetryException`). If the code throws a
-`NullPointerException`, the retrier will immediately fail throwing an `ExecutionException`.
+(after that time without succeding, it will throw a `ExhaustedException`). If the code throws a
+`NullPointerException`, the retrier will immediately fail throwing an `FailException`.
 
 
 Once it's built, you can use a retrier whenever you want to execute callables, functions, suppliers, etc.

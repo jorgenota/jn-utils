@@ -97,7 +97,7 @@ public class RetrierBuilder {
         failPredicate = failPredicate.or(new ExceptionClassPredicate(exceptionClass));
         return this;
     }
-    
+
     /**
      * Configures the retrier to fail if an exception satisfying the given predicate is
      * thrown by the call.

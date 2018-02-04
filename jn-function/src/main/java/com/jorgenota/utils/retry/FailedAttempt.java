@@ -16,10 +16,6 @@ public final class FailedAttempt {
         this.delaySinceFirstAttempt = delaySinceFirstAttempt;
     }
 
-    public void throwExecutionException() throws ExecutionException {
-        throw e;
-    }
-
     public Throwable getExceptionCause() throws IllegalStateException {
         return e.getCause();
     }

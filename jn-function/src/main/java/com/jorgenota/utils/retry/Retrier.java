@@ -1,7 +1,6 @@
 package com.jorgenota.utils.retry;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 
@@ -25,7 +24,7 @@ public final class Retrier {
         this.failPredicate = notNull(failPredicate, "failPredicate may not be null");
     }
 
-    public <T> T call(Callable<T> callable) throws ExecutionException, RetryException {
+    public <T> T call(Callable<T> callable) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -36,7 +35,7 @@ public final class Retrier {
         }
     }
 
-    public <T, R> R apply(Function<T, R> function, T t) throws ExecutionException, RetryException {
+    public <T, R> R apply(Function<T, R> function, T t) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -47,7 +46,7 @@ public final class Retrier {
         }
     }
 
-    public <T, U, R> R apply(BiFunction<T, U, R> function, T t, U u) throws ExecutionException, RetryException {
+    public <T, U, R> R apply(BiFunction<T, U, R> function, T t, U u) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -58,7 +57,7 @@ public final class Retrier {
         }
     }
 
-    public <T> void accept(Consumer<T> consumer, T t) throws ExecutionException, RetryException {
+    public <T> void accept(Consumer<T> consumer, T t) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -70,7 +69,7 @@ public final class Retrier {
         }
     }
 
-    public <T, U> void accept(BiConsumer<T, U> consumer, T t, U u) throws ExecutionException, RetryException {
+    public <T, U> void accept(BiConsumer<T, U> consumer, T t, U u) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -82,7 +81,7 @@ public final class Retrier {
         }
     }
 
-    public void run(Runnable runnable) throws ExecutionException, RetryException {
+    public void run(Runnable runnable) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -94,7 +93,7 @@ public final class Retrier {
         }
     }
 
-    public <T> T get(Supplier<T> supplier) throws ExecutionException, RetryException {
+    public <T> T get(Supplier<T> supplier) throws RetryException {
         long startTime = System.nanoTime();
         for (int attemptNumber = 1; ; attemptNumber++) {
             try {
@@ -105,15 +104,15 @@ public final class Retrier {
         }
     }
 
-    private void handleFailedAttempt(Exception e, int attemptNumber, long startTime) throws ExecutionException, RetryException {
+    private void handleFailedAttempt(Exception e, int attemptNumber, long startTime) throws RetryException {
         long delaySinceFirstAttempt = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
         FailedAttempt failedAttempt = new FailedAttempt(e, attemptNumber, delaySinceFirstAttempt);
 
         if (failPredicate.test(failedAttempt)) {
-            failedAttempt.throwExecutionException();
+            throw new FailException(failedAttempt);
         }
         if (stopStrategy.shouldStop(failedAttempt)) {
-            throw new RetryException(failedAttempt);
+            throw new ExhaustedRetryException(failedAttempt);
         } else {
             long sleepTime = waitStrategy.computeSleepTime(failedAttempt);
             if (sleepTime > 0) {
@@ -121,7 +120,7 @@ public final class Retrier {
                     Thread.sleep(sleepTime);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
-                    throw new RetryException(failedAttempt);
+                    throw new SleepInterruptedException(failedAttempt);
                 }
             }
         }

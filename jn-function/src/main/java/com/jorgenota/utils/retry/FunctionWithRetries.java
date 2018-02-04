@@ -2,7 +2,6 @@ package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.FunctionWithExceptions;
 
-import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
 /**
@@ -12,9 +11,7 @@ public abstract class FunctionWithRetries<T, R, E extends Exception> extends Doe
     @Override
     public final R apply(T t) {
         try {
-            return getRetrier().apply((FunctionWithExceptions<T,R,E>) this::applyWithRetries, t);
-        } catch (ExecutionException e) {
-            getRetryExceptionHandler().handleExecutionException(e);
+            return getRetrier().apply((FunctionWithExceptions<T, R, E>) this::applyWithRetries, t);
         } catch (RetryException e) {
             getRetryExceptionHandler().handleRetryException(e);
         }

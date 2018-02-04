@@ -2,7 +2,6 @@ package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.BiFunctionWithExceptions;
 
-import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 
 /**
@@ -13,8 +12,6 @@ public abstract class BiFunctionWithRetries<T, U, R, E extends Exception> extend
     public final R apply(T t, U u) {
         try {
             return getRetrier().apply((BiFunctionWithExceptions<T, U, R, E>) this::applyWithRetries, t, u);
-        } catch (ExecutionException e) {
-            getRetryExceptionHandler().handleExecutionException(e);
         } catch (RetryException e) {
             getRetryExceptionHandler().handleRetryException(e);
         }

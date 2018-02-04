@@ -2,7 +2,6 @@ package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.SupplierWithExceptions;
 
-import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
 /**
@@ -12,9 +11,7 @@ public abstract class SupplierWithRetries<T, E extends Exception> extends DoerWi
     @Override
     public final T get() {
         try {
-            return getRetrier().get((SupplierWithExceptions<T,E>) this::getWithRetries);
-        } catch (ExecutionException e) {
-            getRetryExceptionHandler().handleExecutionException(e);
+            return getRetrier().get((SupplierWithExceptions<T, E>) this::getWithRetries);
         } catch (RetryException e) {
             getRetryExceptionHandler().handleRetryException(e);
         }

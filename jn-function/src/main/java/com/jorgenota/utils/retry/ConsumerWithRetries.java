@@ -2,7 +2,6 @@ package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.ConsumerWithExceptions;
 
-import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 /**
@@ -12,9 +11,7 @@ public abstract class ConsumerWithRetries<T, E extends Exception> extends DoerWi
     @Override
     public final void accept(T t) {
         try {
-            getRetrier().accept((ConsumerWithExceptions<T,E>) this::acceptWithRetries, t);
-        } catch (ExecutionException e) {
-            getRetryExceptionHandler().handleExecutionException(e);
+            getRetrier().accept((ConsumerWithExceptions<T, E>) this::acceptWithRetries, t);
         } catch (RetryException e) {
             getRetryExceptionHandler().handleRetryException(e);
         }

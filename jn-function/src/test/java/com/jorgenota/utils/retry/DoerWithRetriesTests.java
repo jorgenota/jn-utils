@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -18,11 +17,6 @@ public class DoerWithRetriesTests {
     private static final RetryExceptionHandler rethrowingRetryExceptionHandler = new RetryExceptionHandler() {
         @Override
         public void handleRetryException(RetryException e) {
-            throw new RuntimeException(e);
-        }
-
-        @Override
-        public void handleExecutionException(ExecutionException e) {
             throw new RuntimeException(e);
         }
     };
@@ -74,7 +68,7 @@ public class DoerWithRetriesTests {
                 biConsumerWithRetries.accept("2", "3");
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -103,7 +97,7 @@ public class DoerWithRetriesTests {
                 biConsumerWithRetries.accept("2", "3");
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -156,7 +150,7 @@ public class DoerWithRetriesTests {
                 biFunctionWithRetries.apply(2, 3);
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -185,7 +179,7 @@ public class DoerWithRetriesTests {
                 biFunctionWithRetries.apply(2, 3);
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -236,7 +230,7 @@ public class DoerWithRetriesTests {
                 consumerWithRetries.accept("2");
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -263,7 +257,7 @@ public class DoerWithRetriesTests {
                 consumerWithRetries.accept("2");
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -316,7 +310,7 @@ public class DoerWithRetriesTests {
                 functionWithRetries.apply(2);
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -345,7 +339,7 @@ public class DoerWithRetriesTests {
                 functionWithRetries.apply(2);
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -396,7 +390,7 @@ public class DoerWithRetriesTests {
                 runnableWithRetries.run();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -425,7 +419,7 @@ public class DoerWithRetriesTests {
                 runnableWithRetries.run();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -478,7 +472,7 @@ public class DoerWithRetriesTests {
                 callableWithRetries.call();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -507,7 +501,7 @@ public class DoerWithRetriesTests {
                 callableWithRetries.call();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }
@@ -560,7 +554,7 @@ public class DoerWithRetriesTests {
                 supplierWithRetries.get();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(RetryException.class);
+                assertThat(e).hasCauseInstanceOf(ExhaustedRetryException.class);
             }
         }
 
@@ -589,7 +583,7 @@ public class DoerWithRetriesTests {
                 supplierWithRetries.get();
                 failBecauseExceptionWasNotThrown(RuntimeException.class);
             } catch (RuntimeException e) {
-                assertThat(e).hasCauseInstanceOf(ExecutionException.class);
+                assertThat(e).hasCauseInstanceOf(FailException.class);
             }
         }
     }

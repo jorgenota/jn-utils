@@ -3,7 +3,7 @@ package com.jorgenota.utils.retry;
 /**
  * @author Jorge Alonso
  */
-public class RetryException extends Exception {
+public abstract class RetryException extends Exception {
 
     FailedAttempt failedAttempt;
 
