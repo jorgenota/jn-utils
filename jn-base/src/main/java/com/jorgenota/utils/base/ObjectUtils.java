@@ -1,5 +1,8 @@
 package com.jorgenota.utils.base;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
@@ -10,6 +13,12 @@ import java.util.Optional;
  */
 public final class ObjectUtils {
     private ObjectUtils() {
+    }
+
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    static {
+        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**

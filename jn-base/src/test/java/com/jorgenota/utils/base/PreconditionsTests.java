@@ -271,14 +271,14 @@ public class PreconditionsTests {
 
     @Test
     public void testNoNullElements() {
-        Preconditions.noNullElements(new String[] { "1234" }, "enigma");
-        Preconditions.noNullElements(new String[] {}, "enigma");
+        Preconditions.noNullElements(new String[]{"1234"}, "enigma");
+        Preconditions.noNullElements(new String[]{}, "enigma");
     }
 
     @Test
     public void testNoNullElementsWithNullElements() {
         try {
-            Preconditions.noNullElements(new String[] { "foo", null, "bar" }, "enigma notNull");
+            Preconditions.noNullElements(new String[]{"foo", null, "bar"}, "enigma notNull");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
             assertThat(e).hasMessage("enigma notNull");
