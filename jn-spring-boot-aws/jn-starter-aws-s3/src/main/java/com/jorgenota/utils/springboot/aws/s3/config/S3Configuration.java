@@ -1,8 +1,10 @@
 package com.jorgenota.utils.springboot.aws.s3.config;
 
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.jorgenota.utils.aws.s3.SimpleS3Client;
+import com.jorgenota.utils.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,7 +27,14 @@ public class S3Configuration {
     public AmazonS3 amazonS3() {
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
         if (!StringUtils.isEmpty(configuration.getRegion())) {
-            builder.setRegion(configuration.getRegion());
+            if (!StringUtils.isEmpty(configuration.getEndpoint())) {
+                builder.setEndpointConfiguration(
+                    new AwsClientBuilder.EndpointConfiguration(configuration.getEndpoint(), configuration.getRegion()));
+            } else {
+                builder.setRegion(configuration.getRegion());
+            }
+        } else if (!StringUtils.isEmpty(configuration.getEndpoint())) {
+            Preconditions.empty(configuration.getEndpoint(), "Endpoint should be empty if region is empty");
         }
         return builder.build();
     }

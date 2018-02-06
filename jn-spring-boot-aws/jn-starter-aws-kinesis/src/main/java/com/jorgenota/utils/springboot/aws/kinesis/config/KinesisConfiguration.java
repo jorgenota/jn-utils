@@ -1,8 +1,10 @@
 package com.jorgenota.utils.springboot.aws.kinesis.config;
 
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.jorgenota.utils.aws.kinesis.SimpleKinesisClient;
+import com.jorgenota.utils.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,7 +28,14 @@ public class KinesisConfiguration {
     public AmazonKinesis amazonKinesis() {
         AmazonKinesisClientBuilder builder = AmazonKinesisClientBuilder.standard();
         if (!StringUtils.isEmpty(configuration.getRegion())) {
-            builder.setRegion(configuration.getRegion());
+            if (!StringUtils.isEmpty(configuration.getEndpoint())) {
+                builder.setEndpointConfiguration(
+                    new AwsClientBuilder.EndpointConfiguration(configuration.getEndpoint(), configuration.getRegion()));
+            } else {
+                builder.setRegion(configuration.getRegion());
+            }
+        } else if (!StringUtils.isEmpty(configuration.getEndpoint())) {
+            Preconditions.empty(configuration.getEndpoint(), "Endpoint should be empty if region is empty");
         }
         return builder.build();
     }

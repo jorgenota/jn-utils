@@ -7,5 +7,6 @@ to simplify the use of Kinesis with retrying capabilities).
 | Property               | Description                                                                | Default value  |
 | ---------------------- | -------------------------------------------------------------------------- | -------------- |
 | aws.kinesis.region          | Region for the Kinesis Service. If not informed, the default region will by used |     |
+| aws.kinesis.endpoint  | Service endpoint either with or without the protocol. Only use this if using a non-standard service endpoint.                         |     |
 | aws.kinesis.retryAttempts   | Number of attempts when the `SimpleKinesisClient` connects to Kinesis                |   1 |
 | aws.kinesis.retrySleepTime  | Waiting time in milliseconds between attempts                         |    0 |

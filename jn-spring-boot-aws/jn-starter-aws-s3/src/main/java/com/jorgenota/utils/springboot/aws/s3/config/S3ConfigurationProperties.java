@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("aws.s3")
 public class S3ConfigurationProperties {
     private String region;
+    private String endpoint;
     private int retryAttempts = 1;
     private long retrySleepTime;
 }

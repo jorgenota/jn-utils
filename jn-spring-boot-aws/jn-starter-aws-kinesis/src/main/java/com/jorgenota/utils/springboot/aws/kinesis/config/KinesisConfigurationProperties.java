@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("aws.kinesis")
 public class KinesisConfigurationProperties {
     private String region;
+    private String endpoint;
     private int retryAttempts = 1;
     private long retrySleepTime;
 }
