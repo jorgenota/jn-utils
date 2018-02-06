@@ -174,6 +174,39 @@ public class PreconditionsTests {
     }
 
     @Test
+    public void testEmptyArray() {
+        Preconditions.empty(new String[]{}, "enigma");
+        Preconditions.empty(null, "enigma");
+    }
+
+    @Test
+    public void testEmptyArrayWithNotEmptyArray() {
+        try {
+            Preconditions.empty(new String[]{null}, "enigma empty");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).hasMessage("enigma empty");
+        }
+
+        try {
+            Preconditions.empty(new String[]{"a"}, "enigma empty");
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            assertThat(e).hasMessage("enigma empty");
+        }
+    }
+
+    @Test
+    public void testEmptyCollections() {
+        Preconditions.empty("", "enigma");
+        Preconditions.empty((Collection<?>) null, "enigma");
+        Preconditions.empty((Map<?,?>) null, "enigma");
+        Preconditions.empty(emptyList(), "enigma");
+        Preconditions.empty(emptyMap(), "enigma");
+        Preconditions.empty(Optional.empty(), "enigma");
+    }
+
+    @Test
     public void testNotEmptyArray() {
         Preconditions.notEmpty(new String[]{"1234"}, "enigma");
         Preconditions.notEmpty(new String[]{null}, "enigma");

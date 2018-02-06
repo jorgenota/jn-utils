@@ -169,6 +169,38 @@ public final class Preconditions {
     }
 
     /**
+     * Assert that an array is
+     * {@code null} or does not contain any element.
+     * <pre class="code">Assert.empty(array, "The array must not contain elements");</pre>
+     *
+     * @param array   the array to check
+     * @param message the exception message to use if the assertion fails
+     * @throws IllegalArgumentException if the object array contains elements
+     */
+    public static void empty(Object[] array, String message) {
+        if (!ObjectUtils.isEmpty(array)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Assert that an object is empty; that is, it must be
+     * {@code null} or must have no content.
+     * <pre class="code">Assert.empty(collection, "Collection must not contain elements");</pre>
+     *
+     * @param object  the object to check
+     * @param message the exception message to use if the assertion fails
+     * @throws IllegalArgumentException if the collection
+     *                                  contains elements
+     * @see ObjectUtils#isEmpty(Object)
+     */
+    public static void empty(Object object, String message) {
+        if (!ObjectUtils.isEmpty(object)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
      * Assert that an array contains no {@code null} elements.
      * <p>Note: Does not complain if the array is empty!
      * <pre class="code">Assert.noNullElements(array, "The array must contain non-null elements");</pre>
