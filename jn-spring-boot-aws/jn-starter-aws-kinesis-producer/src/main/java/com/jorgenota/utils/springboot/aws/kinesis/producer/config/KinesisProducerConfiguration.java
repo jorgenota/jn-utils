@@ -1,4 +1,4 @@
-package com.jorgenota.utils.springboot.aws.kinesis.config;
+package com.jorgenota.utils.springboot.aws.kinesis.producer.config;
 
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.kinesis.AmazonKinesis;
@@ -17,11 +17,11 @@ import org.springframework.util.StringUtils;
  */
 @Configuration
 @EnableConfigurationProperties({
-    KinesisConfigurationProperties.class})
-public class KinesisConfiguration {
+    KinesisProducerConfigurationProperties.class})
+public class KinesisProducerConfiguration {
 
     @Autowired
-    private KinesisConfigurationProperties configuration;
+    private KinesisProducerConfigurationProperties configuration;
 
     @ConditionalOnMissingBean
     @Bean
