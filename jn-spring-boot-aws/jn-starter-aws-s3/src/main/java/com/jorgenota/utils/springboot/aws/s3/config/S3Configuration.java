@@ -3,7 +3,7 @@ package com.jorgenota.utils.springboot.aws.s3.config;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.jorgenota.utils.aws.s3.SimpleS3Client;
+import com.jorgenota.utils.aws.s3.S3ObjectStore;
 import com.jorgenota.utils.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -41,11 +41,11 @@ public class S3Configuration {
 
     @ConditionalOnMissingBean
     @Bean
-    public SimpleS3Client simpleS3Client() {
+    public S3ObjectStore simpleS3Client() {
         if (configuration.getRetryAttempts() > 1)
-            return new SimpleS3Client(amazonS3(), configuration.getRetryAttempts(), configuration.getRetrySleepTime());
+            return new S3ObjectStore(amazonS3(), configuration.getRetryAttempts(), configuration.getRetrySleepTime());
         else {
-            return new SimpleS3Client(amazonS3());
+            return new S3ObjectStore(amazonS3());
         }
     }
 
