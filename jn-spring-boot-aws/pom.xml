@@ -13,8 +13,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>jn-starter-aws-kinesis</module>
+        <module>jn-starter-aws-kinesis-consumer</module>
+        <module>jn-starter-aws-kinesis-producer</module>
         <module>jn-starter-aws-s3</module>
+        <module>jn-starter-aws-sqs-consumer</module>
     </modules>
 
 
