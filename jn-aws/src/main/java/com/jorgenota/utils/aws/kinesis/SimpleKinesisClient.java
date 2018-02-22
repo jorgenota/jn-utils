@@ -4,7 +4,7 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.kinesis.AmazonKinesis;
 import com.amazonaws.services.kinesis.model.PutRecordRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jorgenota.utils.base.ClientException;
+import com.jorgenota.utils.base.service.ServiceException;
 import com.jorgenota.utils.retry.*;
 
 import java.nio.ByteBuffer;
@@ -43,18 +43,18 @@ public class SimpleKinesisClient {
         try {
             bytes = OBJECT_MAPPER.writeValueAsBytes(content);
         } catch (JsonProcessingException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
 
         putObject(streamName, partitionKey, bytes);
     }
 
 
-    public void putObject(String streamName, String partitionKey, byte[] content) throws ClientException {
+    public void putObject(String streamName, String partitionKey, byte[] content) throws ServiceException {
         try {
             retrier.run(() -> putObjectInternal(streamName, partitionKey, content));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
