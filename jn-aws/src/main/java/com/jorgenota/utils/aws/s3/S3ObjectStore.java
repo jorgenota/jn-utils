@@ -2,12 +2,10 @@ package com.jorgenota.utils.aws.s3;
 
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.jorgenota.utils.base.ClientException;
+import com.jorgenota.utils.base.service.ObjectStore;
+import com.jorgenota.utils.base.service.ServiceException;
 import com.jorgenota.utils.retry.*;
 
 import java.io.ByteArrayInputStream;
@@ -22,20 +20,20 @@ import static com.jorgenota.utils.base.Preconditions.notNull;
 /**
  * @author Jorge Alonso
  */
-public class SimpleS3Client {
+public class S3ObjectStore implements ObjectStore {
 
     private final Retrier retrier;
     private final AmazonS3 s3;
 
-    public SimpleS3Client(AmazonS3 s3) {
+    public S3ObjectStore(AmazonS3 s3) {
         this(s3, WaitStrategies.noWait(), StopStrategies.stopAfterAttempt(1));
     }
 
-    public SimpleS3Client(AmazonS3 s3, int attemptNumber, long sleepTime) {
+    public S3ObjectStore(AmazonS3 s3, int attemptNumber, long sleepTime) {
         this(s3, WaitStrategies.fixedWait(sleepTime), StopStrategies.stopAfterAttempt(attemptNumber));
     }
 
-    public SimpleS3Client(AmazonS3 s3, WaitStrategy waitStrategy, StopStrategy stopStrategy) {
+    public S3ObjectStore(AmazonS3 s3, WaitStrategy waitStrategy, StopStrategy stopStrategy) {
         this.s3 = notNull(s3, "S3 client mustn't be null");
         this.retrier = RetrierBuilder.newBuilder()
             .withWaitStrategy(waitStrategy)
@@ -44,19 +42,21 @@ public class SimpleS3Client {
             .build();
     }
 
-    public byte[] getObjectAsBytes(String bucketName, String key) throws ClientException {
+    @Override
+    public byte[] getObjectAsBytes(String bucketName, String key) throws ServiceException {
         try {
             return retrier.call(() -> getBytesInternal(bucketName, key));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
-    public String getObjectAsString(String bucketName, String key) throws ClientException {
+    @Override
+    public String getObjectAsString(String bucketName, String key) throws ServiceException {
         try {
             return retrier.call(() -> getStringInternal(bucketName, key));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
@@ -84,19 +84,21 @@ public class SimpleS3Client {
         return s3.getObjectAsString(bucketName, key);
     }
 
-    public void putObject(String bucketName, String key, byte[] content, String contentType) throws SdkClientException {
+    @Override
+    public void putObject(String bucketName, String key, byte[] content, String contentType) throws ServiceException {
         try {
             retrier.run(() -> putObjectInternal(bucketName, key, content, contentType));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
-    public void putObject(String bucketName, String key, String content, String contentType) throws SdkClientException {
+    @Override
+    public void putObject(String bucketName, String key, String content, String contentType) throws ServiceException {
         try {
             retrier.run(() -> putObjectInternal(bucketName, key, content.getBytes(StandardCharsets.UTF_8), contentType));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
@@ -108,19 +110,21 @@ public class SimpleS3Client {
         s3.putObject(bucketName, key, new ByteArrayInputStream(content), metadata);
     }
 
-    public void deleteObject(String bucketName, String key) throws SdkClientException {
+    @Override
+    public void deleteObject(String bucketName, String key) throws ServiceException {
         try {
             retrier.run(() -> deleteObjectInternal(bucketName, key));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
-    public void deleteObjects(String bucketName, String key) throws SdkClientException {
+    @Override
+    public void deleteObjects(String bucketName, Collection<String> keys) throws ServiceException {
         try {
-            retrier.run(() -> deleteObjectInternal(bucketName, key));
+            retrier.run(() -> deleteObjectsInternal(bucketName, keys));
         } catch (RetryException e) {
-            throw new ClientException(e.getCause());
+            throw new ServiceException(e.getCause());
         }
     }
 
@@ -133,6 +137,36 @@ public class SimpleS3Client {
         multiObjectDeleteRequest.setKeys(keys.stream()
             .map(x -> new DeleteObjectsRequest.KeyVersion(x)).collect(Collectors.toList()));
 
+
         s3.deleteObjects(multiObjectDeleteRequest);
+    }
+
+    @Override
+    public void deleteBucket(String bucketName) throws ServiceException {
+        try {
+
+            ObjectListing objectListing = s3.listObjects(bucketName);
+
+            while (true) {
+                for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+                    s3.deleteObject(bucketName, objectSummary.getKey());
+                }
+
+                if (objectListing.isTruncated()) {
+                    objectListing = s3.listNextBatchOfObjects(objectListing);
+                } else {
+                    break;
+                }
+            }
+
+            VersionListing list = s3.listVersions(new ListVersionsRequest().withBucketName(bucketName));
+            for (S3VersionSummary s : list.getVersionSummaries()) {
+                s3.deleteVersion(bucketName, s.getKey(), s.getVersionId());
+            }
+
+            s3.deleteBucket(bucketName);
+        } catch (Exception e) {
+            throw new ServiceException(e.getCause());
+        }
     }
 }
