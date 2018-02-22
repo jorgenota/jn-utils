@@ -139,7 +139,7 @@ public final class Preconditions {
     /**
      * Assert that an array contains elements; that is, it must not be
      * {@code null} and must contain at least one element.
-     * <pre class="code">Assert.notEmpty(array, "The array must contain elements");</pre>
+     * <pre class="code">Preconditions.notEmpty(array, "The array must contain elements");</pre>
      *
      * @param array   the array to check
      * @param message the exception message to use if the assertion fails
@@ -154,7 +154,7 @@ public final class Preconditions {
     /**
      * Assert that an object is not empty; that is, it must not be
      * {@code null} and must has content.
-     * <pre class="code">Assert.notEmpty(collection, "Collection must contain elements");</pre>
+     * <pre class="code">Preconditions.notEmpty(collection, "Collection must contain elements");</pre>
      *
      * @param object  the object to check
      * @param message the exception message to use if the assertion fails
@@ -171,7 +171,7 @@ public final class Preconditions {
     /**
      * Assert that an array is
      * {@code null} or does not contain any element.
-     * <pre class="code">Assert.empty(array, "The array must not contain elements");</pre>
+     * <pre class="code">Preconditions.empty(array, "The array must not contain elements");</pre>
      *
      * @param array   the array to check
      * @param message the exception message to use if the assertion fails
@@ -186,7 +186,7 @@ public final class Preconditions {
     /**
      * Assert that an object is empty; that is, it must be
      * {@code null} or must have no content.
-     * <pre class="code">Assert.empty(collection, "Collection must not contain elements");</pre>
+     * <pre class="code">Preconditions.empty(collection, "Collection must not contain elements");</pre>
      *
      * @param object  the object to check
      * @param message the exception message to use if the assertion fails
@@ -203,7 +203,7 @@ public final class Preconditions {
     /**
      * Assert that an array contains no {@code null} elements.
      * <p>Note: Does not complain if the array is empty!
-     * <pre class="code">Assert.noNullElements(array, "The array must contain non-null elements");</pre>
+     * <pre class="code">Preconditions.noNullElements(array, "The array must contain non-null elements");</pre>
      *
      * @param array   the array to check
      * @param message the exception message to use if the assertion fails

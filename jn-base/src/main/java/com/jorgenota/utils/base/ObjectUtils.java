@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Array;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +22,8 @@ public final class ObjectUtils {
     static {
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
+
+    public static final CharsetDecoder UTF8_DECODER = Charset.forName("UTF-8").newDecoder();
 
     /**
      * Determine whether the given array is empty:

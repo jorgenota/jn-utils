@@ -200,7 +200,7 @@ public class PreconditionsTests {
     public void testEmptyCollections() {
         Preconditions.empty("", "enigma");
         Preconditions.empty((Collection<?>) null, "enigma");
-        Preconditions.empty((Map<?,?>) null, "enigma");
+        Preconditions.empty((Map<?, ?>) null, "enigma");
         Preconditions.empty(emptyList(), "enigma");
         Preconditions.empty(emptyMap(), "enigma");
         Preconditions.empty(Optional.empty(), "enigma");
