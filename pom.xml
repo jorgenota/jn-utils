@@ -19,8 +19,8 @@
 
         <!-- libraries versions -->
         <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
-        <awsjavasdk.version>1.11.271</awsjavasdk.version>
-        <amazon-kinesis-client.version>1.8.10</amazon-kinesis-client.version>
+        <awsjavasdk.version>1.11.283</awsjavasdk.version>
+        <amazon-kinesis-client.version>1.9.0</amazon-kinesis-client.version>
 
         <!-- plugins versions -->
         <junit.platform.version>1.0.3</junit.platform.version>
