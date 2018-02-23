@@ -17,28 +17,25 @@
 package com.jorgenota.utils.aws.sqs.listener;
 
 import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.model.ChangeMessageVisibilityRequest;
-import com.jorgenota.utils.aws.support.Visibility;
+import com.amazonaws.services.sqs.model.DeleteMessageRequest;
+import com.jorgenota.utils.aws.support.Acknowledgment;
 
 import java.util.concurrent.Future;
 
-public class QueueMessageVisibility implements Visibility {
+public class SqsMessageAcknowledgment implements Acknowledgment {
 
     private final AmazonSQSAsync amazonSqsAsync;
     private final String queueUrl;
     private final String receiptHandle;
 
-    public QueueMessageVisibility(AmazonSQSAsync amazonSqsAsync, String queueUrl, String receiptHandle) {
+    public SqsMessageAcknowledgment(AmazonSQSAsync amazonSqsAsync, String queueUrl, String receiptHandle) {
         this.amazonSqsAsync = amazonSqsAsync;
         this.queueUrl = queueUrl;
         this.receiptHandle = receiptHandle;
     }
 
     @Override
-    public Future<?> extend(int seconds) {
-        return this.amazonSqsAsync.changeMessageVisibilityAsync(new ChangeMessageVisibilityRequest()
-            .withQueueUrl(this.queueUrl)
-            .withReceiptHandle(this.receiptHandle)
-            .withVisibilityTimeout(seconds));
+    public Future<?> acknowledge() {
+        return this.amazonSqsAsync.deleteMessageAsync(new DeleteMessageRequest(this.queueUrl, this.receiptHandle));
     }
 }

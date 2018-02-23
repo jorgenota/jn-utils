@@ -21,16 +21,16 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.jorgenota.utils.aws.sqs.QueueMessageUtils.createMessage;
+import static com.jorgenota.utils.aws.sqs.SqsMessageUtils.createMessage;
 
-public class QueueMessageChannel extends AbstractMessageChannel implements PollableChannel {
+public class SqsMessageChannel extends AbstractMessageChannel implements PollableChannel {
 
     static final String ATTRIBUTE_NAMES = "All";
     private static final String MESSAGE_ATTRIBUTE_NAMES = "All";
     private final AmazonSQSAsync amazonSqs;
     private final String queueUrl;
 
-    public QueueMessageChannel(AmazonSQSAsync amazonSqs, String queueUrl) {
+    public SqsMessageChannel(AmazonSQSAsync amazonSqs, String queueUrl) {
         this.amazonSqs = amazonSqs;
         this.queueUrl = queueUrl;
     }
@@ -91,11 +91,11 @@ public class QueueMessageChannel extends AbstractMessageChannel implements Polla
         HashMap<String, MessageAttributeValue> messageAttributes = new HashMap<>();
         for (Map.Entry<String, Object> messageHeader : message.getHeaders().entrySet()) {
             String messageHeaderName = messageHeader.getKey();
-            Object messageHeaderValue = messageHeader.getValue();
-
             if (isSkipHeader(messageHeaderName)) {
                 continue;
             }
+
+            Object messageHeaderValue = messageHeader.getValue();
 
             if (MessageHeaders.CONTENT_TYPE.equals(messageHeaderName) && messageHeaderValue != null) {
                 messageAttributes.put(messageHeaderName, getContentTypeMessageAttribute(messageHeaderValue));

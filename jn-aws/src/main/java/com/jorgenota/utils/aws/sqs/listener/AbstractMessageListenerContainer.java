@@ -22,7 +22,7 @@ import com.amazonaws.services.sqs.model.GetQueueAttributesRequest;
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
 import com.amazonaws.services.sqs.model.QueueAttributeName;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
-import com.jorgenota.utils.aws.sqs.DynamicQueueUrlDestinationResolver;
+import com.jorgenota.utils.aws.sqs.DynamicSqsUrlDestinationResolver;
 import com.jorgenota.utils.aws.support.ResourceIdResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +119,7 @@ abstract class AbstractMessageListenerContainer implements InitializingBean, Dis
      * Configures the destination resolver used to retrieve the queue url based on the destination name configured for
      * this instance. <br/>
      * This setter can be used when a custom configured {@link DestinationResolver}
-     * must be provided. (For example if one want to have the {@link DynamicQueueUrlDestinationResolver}
+     * must be provided. (For example if one want to have the {@link DynamicSqsUrlDestinationResolver}
      * with the auto creation of queues set to {@code true}.
      *
      * @param destinationResolver - the destination resolver. Must not be null
@@ -246,9 +246,9 @@ abstract class AbstractMessageListenerContainer implements InitializingBean, Dis
         synchronized (this.getLifecycleMonitor()) {
             if (this.destinationResolver == null) {
                 if (this.resourceIdResolver == null) {
-                    this.destinationResolver = new CachingDestinationResolverProxy<>(new DynamicQueueUrlDestinationResolver(this.amazonSqs));
+                    this.destinationResolver = new CachingDestinationResolverProxy<>(new DynamicSqsUrlDestinationResolver(this.amazonSqs));
                 } else {
-                    this.destinationResolver = new CachingDestinationResolverProxy<>(new DynamicQueueUrlDestinationResolver(this.amazonSqs, this.resourceIdResolver));
+                    this.destinationResolver = new CachingDestinationResolverProxy<>(new DynamicSqsUrlDestinationResolver(this.amazonSqs, this.resourceIdResolver));
                 }
             }
 

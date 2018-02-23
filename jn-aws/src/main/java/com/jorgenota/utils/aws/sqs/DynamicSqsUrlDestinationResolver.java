@@ -10,20 +10,20 @@ import org.springframework.util.Assert;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class DynamicQueueUrlDestinationResolver implements DestinationResolver<String> {
+public class DynamicSqsUrlDestinationResolver implements DestinationResolver<String> {
 
     private final AmazonSQS amazonSqs;
     private final ResourceIdResolver resourceIdResolver;
     private boolean autoCreate;
 
-    public DynamicQueueUrlDestinationResolver(AmazonSQS amazonSqs, ResourceIdResolver resourceIdResolver) {
+    public DynamicSqsUrlDestinationResolver(AmazonSQS amazonSqs, ResourceIdResolver resourceIdResolver) {
         Assert.notNull(amazonSqs, "amazonSqs must not be null");
 
         this.amazonSqs = amazonSqs;
         this.resourceIdResolver = resourceIdResolver;
     }
 
-    public DynamicQueueUrlDestinationResolver(AmazonSQS amazonSqs) {
+    public DynamicSqsUrlDestinationResolver(AmazonSQS amazonSqs) {
         this(amazonSqs, null);
     }
 

@@ -17,12 +17,12 @@ import org.springframework.util.NumberUtils;
 
 import java.util.*;
 
-public final class QueueMessageUtils {
+public final class SqsMessageUtils {
 
     private static final String RECEIPT_HANDLE_MESSAGE_ATTRIBUTE_NAME = "ReceiptHandle";
     private static final String MESSAGE_ID_MESSAGE_ATTRIBUTE_NAME = "MessageId";
 
-    private QueueMessageUtils() {
+    private SqsMessageUtils() {
         // Avoid instantiation
     }
 

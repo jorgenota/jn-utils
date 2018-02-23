@@ -1,6 +1,6 @@
 package com.jorgenota.utils.aws.sqs.listener;
 
-import com.jorgenota.utils.aws.sqs.QueueMessageUtils;
+import com.jorgenota.utils.aws.sqs.SqsMessageUtils;
 import com.jorgenota.utils.aws.support.ConvertingChannelMessageHandler;
 import com.jorgenota.utils.base.Preconditions;
 import org.springframework.messaging.converter.MessageConverter;
@@ -22,7 +22,7 @@ public abstract class AbstractSqsMessageHandler<T> implements SqsMessageHandler,
 
     public AbstractSqsMessageHandler(SqsMessageDeletionPolicy deletionPolicy, MessageConverter messageConverter, Set<String> channels) {
         this.deletionPolicy = (deletionPolicy != null) ? deletionPolicy : SqsMessageDeletionPolicy.NO_REDRIVE;
-        this.messageConverter = QueueMessageUtils.getMessageConverter(messageConverter);
+        this.messageConverter = SqsMessageUtils.getMessageConverter(messageConverter);
         this.channels = Preconditions.notNull(channels, "channels mustn't be null");
     }
 
