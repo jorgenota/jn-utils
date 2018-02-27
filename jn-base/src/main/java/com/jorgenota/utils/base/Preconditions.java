@@ -1,5 +1,8 @@
 package com.jorgenota.utils.base;
 
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
+
 /**
  * Assertion utility class that assists in validating arguments.
  * <p>
