@@ -19,7 +19,7 @@ package com.jorgenota.utils.base.messaging;
 /**
  * A {@link MessageChannel} from which messages may be actively received through polling.
  */
-public interface PollableChannel<T, U extends MessageAttributes> extends MessageChannel<T, U> {
+public interface PollableChannel<T, U extends MessageHeaders> extends MessageChannel<T, U> {
 
     /**
      * Receive a message from this channel, blocking indefinitely if necessary.

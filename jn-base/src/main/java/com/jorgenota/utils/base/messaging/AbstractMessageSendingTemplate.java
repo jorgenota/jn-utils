@@ -27,7 +27,7 @@ import static com.jorgenota.utils.base.Preconditions.state;
  * Abstract base class for implementations of {@link MessageSendingOperations}.
  */
 @Slf4j
-public abstract class AbstractMessageSendingTemplate<T, U extends MessageAttributes, V, D> implements MessageSendingOperations<T, U, V, D> {
+public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders, V, D> implements MessageSendingOperations<T, U, V, D> {
 
     private volatile D defaultDestination;
     private volatile MessageConverter converter = new SimpleMessageConverter();

@@ -22,7 +22,7 @@ package com.jorgenota.utils.base.messaging;
  *
  * @see DestinationResolver
  */
-public interface DestinationResolvingMessageReceivingOperations<T, U extends MessageAttributes, V, D> extends MessageReceivingOperations<T, U, V, D> {
+public interface DestinationResolvingMessageReceivingOperations<T, U extends MessageHeaders, V, D> extends MessageReceivingOperations<T, U, V, D> {
 
     /**
      * Resolve the given destination name and receive a message from it.

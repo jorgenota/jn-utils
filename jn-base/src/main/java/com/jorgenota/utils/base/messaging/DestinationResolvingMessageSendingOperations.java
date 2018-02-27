@@ -22,7 +22,7 @@ import com.jorgenota.utils.base.messaging.converter.MessageConverter;
  * Extends {@link MessageSendingOperations} and adds operations for sending messages
  * to a destination specified as a (resolvable) String name.
  */
-public interface DestinationResolvingMessageSendingOperations<T, U extends MessageAttributes, V, D> extends MessageSendingOperations<T, U, V, D> {
+public interface DestinationResolvingMessageSendingOperations<T, U extends MessageHeaders, V, D> extends MessageSendingOperations<T, U, V, D> {
 
     /**
      * Resolve the given destination name to a destination and send a message to it.

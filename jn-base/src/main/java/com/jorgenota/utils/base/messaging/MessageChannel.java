@@ -20,10 +20,10 @@ package com.jorgenota.utils.base.messaging;
  * Defines methods for sending messages.
  *
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
- * @param <U> the type of the message attributes. Must be a subclass of MessageAttributes
+ * @param <U> the type of the message attributes. Must be a subclass of MessageHeaders
  */
 @FunctionalInterface
-public interface MessageChannel<T, U extends MessageAttributes> {
+public interface MessageChannel<T, U extends MessageHeaders> {
 
     /**
      * Constant for sending a message without a prescribed timeout.

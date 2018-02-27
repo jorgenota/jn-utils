@@ -17,18 +17,18 @@
 package com.jorgenota.utils.base.messaging.converter;
 
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
- * @param <U> the type of the message attributes. Must be a subclass of MessageAttributes
+ * @param <U> the type of the message attributes. Must be a subclass of MessageHeaders
  * @param <V> the type of the payload to convert
  *            <p>
  *            A converter to turn the payload of a {@link Message} from serialized form to a typed
  *            Object and vice versa. The message header may be
  *            used to specify the media type of the message content.
  */
-public interface MessageConverter<T, U extends MessageAttributes, V> {
+public interface MessageConverter<T, U extends MessageHeaders, V> {
 
     /**
      * Convert the payload of a {@link Message} from a serialized form to a typed Object

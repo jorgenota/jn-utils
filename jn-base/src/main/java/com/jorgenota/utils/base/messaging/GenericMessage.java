@@ -16,7 +16,7 @@
 
 package com.jorgenota.utils.base.messaging;
 
-import com.jorgenota.utils.base.ObjectUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.io.Serializable;
 
@@ -26,7 +26,7 @@ import static com.jorgenota.utils.base.Preconditions.notNull;
  * An implementation of {@link Message} with a generic payload.
  * Once created, a GenericMessage is immutable.
  */
-public class GenericMessage<T, U extends MessageAttributes> implements Message<T, U>, Serializable {
+public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U>, Serializable {
 
     private static final long serialVersionUID = 4268801052358035098L;
 

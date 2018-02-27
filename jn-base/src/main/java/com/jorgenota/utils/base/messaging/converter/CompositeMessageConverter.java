@@ -17,7 +17,7 @@
 package com.jorgenota.utils.base.messaging.converter;
 
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +29,7 @@ import static com.jorgenota.utils.base.Preconditions.notEmpty;
  * A {@link MessageConverter} that delegates to a list of registered converters
  * to be invoked until one of them returns a non-null result.
  */
-public class CompositeMessageConverter<T, U extends MessageAttributes, V> implements MessageConverter<T, U, V> {
+public class CompositeMessageConverter<T, U extends MessageHeaders, V> implements MessageConverter<T, U, V> {
 
     private final List<MessageConverter> converters;
 

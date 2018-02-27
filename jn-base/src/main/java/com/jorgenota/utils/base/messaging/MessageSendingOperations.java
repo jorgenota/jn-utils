@@ -22,11 +22,11 @@ import com.jorgenota.utils.base.messaging.converter.MessageConverter;
  * Operations for sending messages to a destination.
  *
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
- * @param <U> the type of the message attributes. Must be a subclass of MessageAttributes
+ * @param <U> the type of the message attributes. Must be a subclass of MessageHeaders
  * @param <V> the type of the payload to convert
  * @param <D> the type of destination to receive messages from
  */
-public interface MessageSendingOperations<T, U extends MessageAttributes, V, D> {
+public interface MessageSendingOperations<T, U extends MessageHeaders, V, D> {
 
     /**
      * Send a message to a default destination.

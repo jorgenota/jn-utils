@@ -18,7 +18,7 @@ package com.jorgenota.utils.base.messaging.converter;
 
 import com.jorgenota.utils.base.messaging.GenericMessage;
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 
 /**
  * A simple converter that simply unwraps the message payload as long as it matches the
@@ -27,7 +27,7 @@ import com.jorgenota.utils.base.messaging.MessageAttributes;
  * <p>Note that this converter ignores any content type information that may be present in
  * message headers and should not be used if payload conversion is actually required.
  */
-public class SimpleMessageConverter<T, U extends MessageAttributes, V> implements MessageConverter<T, U, V> {
+public class SimpleMessageConverter<T, U extends MessageHeaders, V> implements MessageConverter<T, U, V> {
 
     @Override
     public V fromMessage(Message<T, U> message, Class<V> targetClass) throws MessageConversionException {

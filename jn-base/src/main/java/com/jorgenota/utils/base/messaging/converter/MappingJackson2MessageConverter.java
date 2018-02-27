@@ -22,7 +22,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;
@@ -42,7 +42,7 @@ import static com.jorgenota.utils.base.Preconditions.notNull;
  * </ul>
  */
 @Slf4j
-public class MappingJackson2MessageConverter<T, U extends MessageAttributes, V> extends AbstractMessageConverter<T, U, V> {
+public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> extends AbstractMessageConverter<T, U, V> {
 
     private final JsonEncoding charset;
     private ObjectMapper objectMapper;

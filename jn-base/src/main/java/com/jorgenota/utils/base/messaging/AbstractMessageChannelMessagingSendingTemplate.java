@@ -3,7 +3,7 @@ package com.jorgenota.utils.base.messaging;
 /**
  * Abstract base class for AWS services messaging templates
  */
-public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extends MessageAttributes, V, D extends MessageChannel> extends AbstractMessageSendingTemplate<T, U, V, D> implements DestinationResolvingMessageSendingOperations<T, U, V, D> {
+public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extends MessageHeaders, V, D extends MessageChannel> extends AbstractMessageSendingTemplate<T, U, V, D> implements DestinationResolvingMessageSendingOperations<T, U, V, D> {
 
     private final DestinationResolver<String> destinationResolver;
 

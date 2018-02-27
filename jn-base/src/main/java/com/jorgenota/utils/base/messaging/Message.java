@@ -2,10 +2,10 @@ package com.jorgenota.utils.base.messaging;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
- * @param <U> the type of the message attributes. Must be a subclass of MessageAttributes
+ * @param <U> the type of the message attributes. Must be a subclass of MessageHeaders
  * @author Jorge Alonso
  */
-public interface Message<T, U extends MessageAttributes> {
+public interface Message<T, U extends MessageHeaders> {
     /**
      * Return the message payload. Never {@code null}.
      */

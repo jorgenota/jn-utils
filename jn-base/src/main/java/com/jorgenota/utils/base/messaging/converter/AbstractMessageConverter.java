@@ -18,7 +18,7 @@ package com.jorgenota.utils.base.messaging.converter;
 
 import com.jorgenota.utils.base.messaging.GenericMessage;
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 
 import static com.jorgenota.utils.base.Preconditions.isTrue;
 
@@ -28,7 +28,7 @@ import static com.jorgenota.utils.base.Preconditions.isTrue;
  * mainly to check if the converter supports the conversion based on the payload class
  * and MIME type.
  */
-public abstract class AbstractMessageConverter<T, U extends MessageAttributes, V> implements MessageConverter<T, U, V> {
+public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> implements MessageConverter<T, U, V> {
 
     private Class<?> serializedPayloadClass = byte[].class;
 
@@ -53,7 +53,7 @@ public abstract class AbstractMessageConverter<T, U extends MessageAttributes, V
      *
      * @param payloadClass either byte[] or String
      */
-    public void setSerializedPayloadClass(Class<?> payloadClass) {
+    public void setSerializedPayloadClass(Class<T> payloadClass) {
         isTrue(byte[].class == payloadClass || String.class == payloadClass,
                 "Payload class must be byte[] or String: " + payloadClass);
         this.serializedPayloadClass = payloadClass;

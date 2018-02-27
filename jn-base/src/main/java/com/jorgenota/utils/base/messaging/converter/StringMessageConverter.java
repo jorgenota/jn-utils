@@ -17,7 +17,7 @@
 package com.jorgenota.utils.base.messaging.converter;
 
 import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageAttributes;
+import com.jorgenota.utils.base.messaging.MessageHeaders;
 
 import java.nio.charset.Charset;
 
@@ -25,7 +25,7 @@ import java.nio.charset.Charset;
  * A {@link MessageConverter} that supports MIME type "text/plain" with the
  * payload converted to and from a String.
  */
-public class StringMessageConverter<T, U extends MessageAttributes> extends AbstractMessageConverter<T, U, String> {
+public class StringMessageConverter<T, U extends MessageHeaders> extends AbstractMessageConverter<T, U, String> {
 
     private final Charset charset;
 
