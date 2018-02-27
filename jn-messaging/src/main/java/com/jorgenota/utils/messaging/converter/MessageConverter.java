@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging.converter;
+package com.jorgenota.utils.messaging.converter;
 
-import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageHeaders;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessageHeaders;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}

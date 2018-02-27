@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging.converter;
+package com.jorgenota.utils.messaging.converter;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.*;
-import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageHeaders;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessageHeaders;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayOutputStream;

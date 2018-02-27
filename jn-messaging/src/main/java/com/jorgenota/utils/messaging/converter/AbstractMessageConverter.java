@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging.converter;
+package com.jorgenota.utils.messaging.converter;
 
-import com.jorgenota.utils.base.messaging.GenericMessage;
-import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageHeaders;
+import com.jorgenota.utils.messaging.GenericMessage;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessageHeaders;
 
 import static com.jorgenota.utils.base.Preconditions.isTrue;
 
@@ -48,7 +48,7 @@ public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> i
 
     /**
      * Configure the preferred serialization class to use (byte[] or String) when
-     * converting an Object payload to a {@link com.jorgenota.utils.base.messaging.Message}.
+     * converting an Object payload to a {@link Message}.
      * <p>The default value is byte[].
      *
      * @param payloadClass either byte[] or String

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging;
+package com.jorgenota.utils.messaging;
 
 /**
  * Operations for receiving messages from a destination.

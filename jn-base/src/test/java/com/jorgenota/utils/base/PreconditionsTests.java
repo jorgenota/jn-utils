@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 /**
- * @see <a href="https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/test/java/org/springframework/util/StringUtilsTests.java">StringUtilsTests.java from Spring Framework</a>
+ *
  */
 public class PreconditionsTests {
 

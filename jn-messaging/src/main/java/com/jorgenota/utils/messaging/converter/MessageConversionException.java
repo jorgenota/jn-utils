@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging.converter;
+package com.jorgenota.utils.messaging.converter;
 
-import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessagingException;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessagingException;
 
 /**
  * An exception raised by {@link MessageConverter} implementations.

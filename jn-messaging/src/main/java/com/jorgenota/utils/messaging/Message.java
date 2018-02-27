@@ -1,4 +1,4 @@
-package com.jorgenota.utils.base.messaging;
+package com.jorgenota.utils.messaging;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}

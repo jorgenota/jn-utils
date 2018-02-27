@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging.converter;
+package com.jorgenota.utils.messaging.converter;
 
-import com.jorgenota.utils.base.messaging.GenericMessage;
-import com.jorgenota.utils.base.messaging.Message;
-import com.jorgenota.utils.base.messaging.MessageHeaders;
+import com.jorgenota.utils.messaging.GenericMessage;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessageHeaders;
 
 /**
  * A simple converter that simply unwraps the message payload as long as it matches the

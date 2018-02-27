@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging;
+package com.jorgenota.utils.messaging;
 
 /**
  * A {@link MessageChannel} from which messages may be actively received through polling.

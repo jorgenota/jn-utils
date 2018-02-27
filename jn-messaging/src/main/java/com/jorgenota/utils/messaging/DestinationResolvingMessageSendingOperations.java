@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.base.messaging;
+package com.jorgenota.utils.messaging;
 
-import com.jorgenota.utils.base.messaging.converter.MessageConverter;
+import com.jorgenota.utils.messaging.converter.MessageConverter;
 
 /**
  * Extends {@link MessageSendingOperations} and adds operations for sending messages
