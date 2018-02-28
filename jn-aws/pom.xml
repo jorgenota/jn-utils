@@ -20,6 +20,11 @@
         </dependency>
         <dependency>
             <groupId>com.jorgenota.utils</groupId>
+            <artifactId>jn-messaging</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jorgenota.utils</groupId>
             <artifactId>jn-function</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -42,6 +47,15 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>amazon-kinesis-client</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
