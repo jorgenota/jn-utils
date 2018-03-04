@@ -18,7 +18,7 @@ public final class ObjectMappingUtils {
     private ObjectMappingUtils() {
     }
 
-    private static ObjectMapper configureObjectMapper() {
+    public static ObjectMapper configureObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);

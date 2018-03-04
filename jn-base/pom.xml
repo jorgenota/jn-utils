@@ -11,8 +11,8 @@
     </parent>
 
     <artifactId>jn-base</artifactId>
-
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
