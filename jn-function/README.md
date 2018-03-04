@@ -70,7 +70,7 @@ try {
     e.printStackTrace();
 }
 ```
-This coce uses a retrier that will retry if the code of the bifunction throws any exception but `NullPointerException`.
+This code uses a retrier that will retry if the code of the bifunction throws any exception but `NullPointerException`.
 It will wait for 100 milliseconds between retries and will stop retrying after 800 milliseconds
 (after that time without succeding, it will throw a `ExhaustedException`). If the code throws a
 `NullPointerException`, the retrier will immediately fail throwing an `FailException`.
@@ -102,10 +102,10 @@ not succeeding. These are some predefined stop strategies:
 
 A fail predicate is a `Predicate<FailedAttempt>` that will decide if a retrier should fail (instead of retrying) when
 the code throws an exception. You can use `RetrierBuilder` to combine one of more predefined fail predicates:
-* failIfException()
-* failIfRuntimeException())
-* failIfExceptionOfType(exceptionClass)
-* failIfException(Predicate<Throwable> exceptionPredicate)
+* `failIfException()`
+* `failIfRuntimeException())`
+* `failIfExceptionOfType(exceptionClass)`
+* `failIfException(Predicate<Throwable> exceptionPredicate)`
 
 ## Functions, Consumers, etc. with retries
 

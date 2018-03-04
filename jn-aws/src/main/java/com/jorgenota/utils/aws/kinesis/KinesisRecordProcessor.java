@@ -8,7 +8,6 @@ import com.amazonaws.services.kinesis.clientlibrary.types.InitializationInput;
 import com.amazonaws.services.kinesis.clientlibrary.types.ProcessRecordsInput;
 import com.amazonaws.services.kinesis.clientlibrary.types.ShutdownInput;
 import com.amazonaws.services.kinesis.model.Record;
-import com.jorgenota.utils.base.ObjectUtils;
 import com.jorgenota.utils.function.RunnableWithExceptions;
 import com.jorgenota.utils.retry.*;
 import lombok.extern.slf4j.Slf4j;

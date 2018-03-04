@@ -2,15 +2,13 @@ package com.jorgenota.utils.aws.sqs;
 
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.jorgenota.utils.aws.support.AbstractMessageChannelMessagingSendingTemplate;
 import com.jorgenota.utils.aws.support.ResourceIdResolver;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessagingException;
-import org.springframework.messaging.converter.CompositeMessageConverter;
-import org.springframework.messaging.converter.MessageConverter;
-import org.springframework.messaging.converter.StringMessageConverter;
-import org.springframework.messaging.core.DestinationResolver;
-import org.springframework.messaging.core.DestinationResolvingMessageReceivingOperations;
+import com.jorgenota.utils.messaging.AbstractMessageChannelMessagingSendingReceivingTemplate;
+import com.jorgenota.utils.messaging.DestinationResolver;
+import com.jorgenota.utils.messaging.DestinationResolvingMessageReceivingOperations;
+import com.jorgenota.utils.messaging.converter.CompositeMessageConverter;
+import com.jorgenota.utils.messaging.converter.MessageConverter;
+import com.jorgenota.utils.messaging.converter.StringMessageConverter;
 
 /**
  * <b>IMPORTANT</b>: For the message conversion this class always tries to first use the {@link StringMessageConverter}
@@ -20,7 +18,7 @@ import org.springframework.messaging.core.DestinationResolvingMessageReceivingOp
  * containing the {@link StringMessageConverter} will not be used anymore and the {@code String} payloads are also going
  * to be converted with the set converter.
  */
-public class SqsMessagingTemplate extends AbstractMessageChannelMessagingSendingTemplate<SqsMessageChannel> implements DestinationResolvingMessageReceivingOperations<SqsMessageChannel> {
+public class SqsMessagingTemplate extends AbstractMessageChannelMessagingSendingReceivingTemplate<SqsMessageChannel> implements DestinationResolvingMessageReceivingOperations<SqsMessageChannel> {
 
     private final AmazonSQSAsync amazonSqs;
 
@@ -67,40 +65,8 @@ public class SqsMessagingTemplate extends AbstractMessageChannelMessagingSending
         return new SqsMessageChannel(this.amazonSqs, physicalResourceIdentifier);
     }
 
-    @Override
-    public Message<String> receive() throws MessagingException {
-        return receive(getRequiredDefaultDestination());
-    }
+    protected void initMessageConverter(MessageConverter messageConverter) {
 
-    @Override
-    public Message<String> receive(SqsMessageChannel destination) throws MessagingException {
-        return destination.receive();
-    }
-
-    @Override
-    public <T> T receiveAndConvert(Class<T> targetClass) throws MessagingException {
-        return receiveAndConvert(getRequiredDefaultDestination(), targetClass);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T receiveAndConvert(SqsMessageChannel destination, Class<T> targetClass) throws MessagingException {
-        Message<String> message = receive(destination);
-        if (message != null) {
-            return (T) getMessageConverter().fromMessage(message, targetClass);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public Message<String> receive(String destinationName) throws MessagingException {
-        return resolveMessageChannelByLogicalName(destinationName).receive();
-    }
-
-    @Override
-    public <T> T receiveAndConvert(String destinationName, Class<T> targetClass) throws MessagingException {
-        SqsMessageChannel channel = resolveMessageChannelByLogicalName(destinationName);
-        return receiveAndConvert(channel, targetClass);
+        setMessageConverter(SqsMessageUtils.getMessageConverter(messageConverter));
     }
 }

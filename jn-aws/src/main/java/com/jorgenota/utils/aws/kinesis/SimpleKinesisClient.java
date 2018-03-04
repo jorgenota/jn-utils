@@ -9,7 +9,7 @@ import com.jorgenota.utils.retry.*;
 
 import java.nio.ByteBuffer;
 
-import static com.jorgenota.utils.base.ObjectUtils.OBJECT_MAPPER;
+import static com.jorgenota.utils.base.ObjectMappingUtils.OBJECT_MAPPER;
 import static com.jorgenota.utils.base.Preconditions.notNull;
 
 

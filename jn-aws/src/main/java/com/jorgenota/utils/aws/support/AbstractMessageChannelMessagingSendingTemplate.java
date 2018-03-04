@@ -1,6 +1,6 @@
 package com.jorgenota.utils.aws.support;
 
-import com.jorgenota.utils.aws.sqs.QueueMessageUtils;
+import com.jorgenota.utils.aws.sqs.SqsMessageUtils;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessagingException;
@@ -66,7 +66,7 @@ public abstract class AbstractMessageChannelMessagingSendingTemplate<D extends M
 
     protected void initMessageConverter(MessageConverter messageConverter) {
 
-        setMessageConverter(QueueMessageUtils.getMessageConverter(messageConverter));
+        setMessageConverter(SqsMessageUtils.getMessageConverter(messageConverter));
     }
 
     protected abstract D resolveMessageChannel(String physicalResourceIdentifier);

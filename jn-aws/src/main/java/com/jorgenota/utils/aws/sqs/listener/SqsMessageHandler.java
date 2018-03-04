@@ -7,8 +7,5 @@ import com.jorgenota.utils.aws.support.ChannelMessageHandler;
  */
 public interface SqsMessageHandler extends ChannelMessageHandler {
 
-    String LOGICAL_RESOURCE_ID = "LogicalResourceId";
-    String ACKNOWLEDGMENT = "Acknowledgment";
-
     public SqsMessageDeletionPolicy getDeletionPolicy();
 }

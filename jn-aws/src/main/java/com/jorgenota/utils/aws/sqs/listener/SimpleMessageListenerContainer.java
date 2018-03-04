@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import static com.jorgenota.utils.aws.sqs.QueueMessageUtils.createMessage;
+import static com.jorgenota.utils.aws.sqs.SqsMessageUtils.createMessage;
 
 /**
  * @author Agim Emruli
@@ -361,10 +361,9 @@ public class SimpleMessageListenerContainer extends AbstractMessageListenerConta
 
         private org.springframework.messaging.Message<String> getMessageForExecution() {
             HashMap<String, Object> additionalHeaders = new HashMap<>();
-            additionalHeaders.put(SqsMessageHandler.LOGICAL_RESOURCE_ID, this.logicalQueueName);
             if (this.deletionPolicy == SqsMessageDeletionPolicy.NEVER) {
                 String receiptHandle = this.message.getReceiptHandle();
-                QueueMessageAcknowledgment acknowledgment = new QueueMessageAcknowledgment(SimpleMessageListenerContainer.this.getAmazonSqs(), this.queueUrl, receiptHandle);
+                SqsMessageAcknowledgment acknowledgment = new SqsMessageAcknowledgment(SimpleMessageListenerContainer.this.getAmazonSqs(), this.queueUrl, receiptHandle);
                 additionalHeaders.put(SqsMessageHandler.ACKNOWLEDGMENT, acknowledgment);
             }
 

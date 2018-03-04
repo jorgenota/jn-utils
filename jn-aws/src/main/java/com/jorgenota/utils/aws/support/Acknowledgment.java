@@ -25,7 +25,7 @@ import java.util.concurrent.Future;
  * message from the SQS queue. The {@link Acknowledgment#acknowledge} method returns a {@link Future} as the acknowledgment can
  * involve some asynchronous request to an AWS API.
  */
-public interface Acknowledgment {
+public interface Acknowledgment<T> {
 
     /**
      * The call to this method acknowledges the caller that the listener method has finished the processing of the message
@@ -33,6 +33,6 @@ public interface Acknowledgment {
      *
      * @return a {@link Future} as the acknowledgment can involve some asynchronous request (i.e. request to an AWS API).
      */
-    Future<?> acknowledge();
+    Future<T> acknowledge();
 
 }

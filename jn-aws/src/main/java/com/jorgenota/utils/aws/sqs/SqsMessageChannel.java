@@ -4,11 +4,9 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.model.*;
 import com.jorgenota.utils.aws.support.MessageAttributeDataTypes;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.MessageDeliveryException;
-import org.springframework.messaging.MessageHeaders;
-import org.springframework.messaging.PollableChannel;
-import org.springframework.messaging.support.AbstractMessageChannel;
+import com.jorgenota.utils.messaging.Message;
+import com.jorgenota.utils.messaging.MessageHeaders;
+import com.jorgenota.utils.messaging.PollableChannel;
 import org.springframework.util.Assert;
 import org.springframework.util.MimeType;
 import org.springframework.util.NumberUtils;
@@ -23,7 +21,7 @@ import java.util.concurrent.TimeoutException;
 
 import static com.jorgenota.utils.aws.sqs.SqsMessageUtils.createMessage;
 
-public class SqsMessageChannel extends AbstractMessageChannel implements PollableChannel {
+public class SqsMessageChannel implements PollableChannel<String, SqsMessageHeaders> {
 
     static final String ATTRIBUTE_NAMES = "All";
     private static final String MESSAGE_ATTRIBUTE_NAMES = "All";
@@ -35,8 +33,34 @@ public class SqsMessageChannel extends AbstractMessageChannel implements Pollabl
         this.queueUrl = queueUrl;
     }
 
-    @Override
-    protected boolean sendInternal(Message<?> message, long timeout) {
+    public final boolean send(org.springframework.messaging.Message<?> message, long timeout) {
+        Assert.notNull(message, "Message must not be null");
+        AbstractMessageChannel.ChannelInterceptorChain chain = new AbstractMessageChannel.ChannelInterceptorChain();
+        boolean sent = false;
+        try {
+            message = chain.applyPreSend(message, this);
+            if (message == null) {
+                return false;
+            }
+            sent = sendInternal(message, timeout);
+            chain.applyPostSend(message, this, sent);
+            chain.triggerAfterSendCompletion(message, this, sent, null);
+            return sent;
+        } catch (Exception ex) {
+            chain.triggerAfterSendCompletion(message, this, sent, ex);
+            if (ex instanceof MessagingException) {
+                throw (MessagingException) ex;
+            }
+            throw new MessageDeliveryException(message, "Failed to send message to " + this, ex);
+        } catch (Throwable err) {
+            MessageDeliveryException ex2 =
+                    new MessageDeliveryException(message, "Failed to send message to " + this, err);
+            chain.triggerAfterSendCompletion(message, this, sent, ex2);
+            throw ex2;
+        }
+    }
+
+    protected boolean sendInternal(Message message, long timeout) {
         try {
             sendMessageAndWaitForResult(prepareSendMessageRequest(message), timeout);
         } catch (AmazonServiceException e) {
@@ -50,7 +74,7 @@ public class SqsMessageChannel extends AbstractMessageChannel implements Pollabl
         return true;
     }
 
-    private SendMessageRequest prepareSendMessageRequest(Message<?> message) {
+    private SendMessageRequest prepareSendMessageRequest(Message<String, SqsMessageHeaders> message) {
         SendMessageRequest sendMessageRequest = new SendMessageRequest(this.queueUrl, String.valueOf(message.getPayload()));
 
         if (message.getHeaders().containsKey(SqsMessageHeaders.SQS_GROUP_ID_HEADER)) {
@@ -87,7 +111,7 @@ public class SqsMessageChannel extends AbstractMessageChannel implements Pollabl
         }
     }
 
-    private Map<String, MessageAttributeValue> getMessageAttributes(Message<?> message) {
+    private Map<String, MessageAttributeValue> getMessageAttributes(Message<String, SqsMessageHeaders> message) {
         HashMap<String, MessageAttributeValue> messageAttributes = new HashMap<>();
         for (Map.Entry<String, Object> messageHeader : message.getHeaders().entrySet()) {
             String messageHeaderName = messageHeader.getKey();
@@ -147,12 +171,12 @@ public class SqsMessageChannel extends AbstractMessageChannel implements Pollabl
     }
 
     @Override
-    public Message<String> receive() {
+    public Message<String, SqsMessageHeaders> receive() {
         return this.receive(0);
     }
 
     @Override
-    public Message<String> receive(long timeout) {
+    public Message<String, SqsMessageHeaders> receive(long timeout) {
         ReceiveMessageResult receiveMessageResult = this.amazonSqs.receiveMessage(
             new ReceiveMessageRequest(this.queueUrl).
                 withMaxNumberOfMessages(1).
@@ -163,7 +187,7 @@ public class SqsMessageChannel extends AbstractMessageChannel implements Pollabl
             return null;
         }
         com.amazonaws.services.sqs.model.Message amazonMessage = receiveMessageResult.getMessages().get(0);
-        Message<String> message = createMessage(amazonMessage);
+        Message<String, SqsMessageHeaders> message = createMessage(amazonMessage);
         this.amazonSqs.deleteMessage(new DeleteMessageRequest(this.queueUrl, amazonMessage.getReceiptHandle()));
         return message;
     }
