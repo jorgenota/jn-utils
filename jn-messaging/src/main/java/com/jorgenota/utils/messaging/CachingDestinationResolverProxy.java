@@ -35,14 +35,6 @@ public class CachingDestinationResolverProxy<D> implements DestinationResolver<D
 
     private DestinationResolver<D> targetDestinationResolver;
 
-
-    /**
-     * Create a new CachingDestinationResolverProxy, setting the target DestinationResolver
-     * through the {@link #setTargetDestinationResolver} bean property.
-     */
-    public CachingDestinationResolverProxy() {
-    }
-
     /**
      * Create a new CachingDestinationResolverProxy using the given target
      * DestinationResolver to actually resolve destinations.
@@ -50,15 +42,6 @@ public class CachingDestinationResolverProxy<D> implements DestinationResolver<D
      * @param targetDestinationResolver the target DestinationResolver to delegate to
      */
     public CachingDestinationResolverProxy(DestinationResolver<D> targetDestinationResolver) {
-        notNull(targetDestinationResolver, "Target DestinationResolver must not be null");
-        this.targetDestinationResolver = targetDestinationResolver;
-    }
-
-
-    /**
-     * Set the target DestinationResolver to delegate to.
-     */
-    public void setTargetDestinationResolver(DestinationResolver<D> targetDestinationResolver) {
         notNull(targetDestinationResolver, "Target DestinationResolver must not be null");
         this.targetDestinationResolver = targetDestinationResolver;
     }

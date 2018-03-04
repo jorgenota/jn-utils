@@ -18,6 +18,7 @@ package com.jorgenota.utils.messaging.converter;
 
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
+import org.springframework.lang.Nullable;
 
 import java.nio.charset.Charset;
 
@@ -47,7 +48,8 @@ public class StringMessageConverter<T, U extends MessageHeaders> extends Abstrac
     }
 
     @Override
-    protected T convertToInternal(String payload, U attributes) {
+    @SuppressWarnings("unchecked")
+    protected T convertToInternal(String payload, @Nullable U attributes) {
         if (byte[].class == getSerializedPayloadClass()) {
             return (T) payload.getBytes(charset);
         }

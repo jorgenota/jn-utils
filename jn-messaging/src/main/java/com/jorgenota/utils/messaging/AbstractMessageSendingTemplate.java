@@ -19,6 +19,7 @@ package com.jorgenota.utils.messaging;
 import com.jorgenota.utils.messaging.converter.MessageConverter;
 import com.jorgenota.utils.messaging.converter.SimpleMessageConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 
 import static com.jorgenota.utils.base.Preconditions.notNull;
 import static com.jorgenota.utils.base.Preconditions.state;
@@ -29,15 +30,9 @@ import static com.jorgenota.utils.base.Preconditions.state;
 @Slf4j
 public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders, V, D> implements MessageSendingOperations<T, U, V, D> {
 
+    @Nullable
     private volatile D defaultDestination;
     private volatile MessageConverter converter = new SimpleMessageConverter();
-
-    /**
-     * Return the configured default destination.
-     */
-    public D getDefaultDestination() {
-        return this.defaultDestination;
-    }
 
     /**
      * Configure the default destination to use in send methods that don't have
@@ -72,6 +67,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
 
     protected final D getRequiredDefaultDestination() {
         state(this.defaultDestination != null, "No 'defaultDestination' configured");
+        //noinspection ConstantConditions
         return this.defaultDestination;
     }
 
@@ -85,7 +81,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
 
     @Override
     public void convertAndSend(V payload) throws MessagingException {
-        convertAndSend(payload, null);
+        convertAndSend(getRequiredDefaultDestination(), payload);
     }
 
     @Override
@@ -94,8 +90,9 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
     }
 
     @Override
-    public void convertAndSend(D destination, V payload, U attributes) throws MessagingException {
-        convertAndSend(destination, payload, attributes, null);
+    public void convertAndSend(D destination, V payload, @Nullable U attributes) throws MessagingException {
+        Message<T, U> message = doConvert(payload, attributes, null);
+        send(destination, message);
     }
 
     @Override
@@ -111,7 +108,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
     }
 
     @Override
-    public void convertAndSend(D destination, V payload, U attributes,
+    public void convertAndSend(D destination, V payload, @Nullable U attributes,
                                MessagePostProcessor<T, U> postProcessor) throws MessagingException {
 
         Message<T, U> message = doConvert(payload, attributes, postProcessor);
@@ -128,7 +125,8 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
      * @param postProcessor the post processor to apply to the message
      * @return the converted message
      */
-    protected Message<T, U> doConvert(V payload, U attributes, MessagePostProcessor<T, U> postProcessor) {
+    @SuppressWarnings("unchecked")
+    protected Message<T, U> doConvert(V payload, @Nullable U attributes, @Nullable MessagePostProcessor<T, U> postProcessor) {
 
         Message<T, U> message = getMessageConverter().toMessage(payload, attributes);
         if (postProcessor != null) {
@@ -136,17 +134,4 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
         }
         return message;
     }
-
-    /**
-     * Provides access to the map of input attributes before a send operation.
-     * Subclasses can modify the attributes and then return the same or a different map.
-     * <p>This default implementation in this class returns the input map.
-     *
-     * @param attributes the attributes to send (or {@code null} if none)
-     * @return the actual attributes to send (or {@code null} if none)
-     */
-    protected U processattributesToSend(U attributes) {
-        return attributes;
-    }
-
 }

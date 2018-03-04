@@ -3,7 +3,7 @@ package com.jorgenota.utils.messaging;
 /**
  * Abstract base class for AWS services messaging templates
  */
-public abstract class AbstractMessageChannelMessagingSendingReceivingTemplate<T, U extends MessageHeaders, V, D extends PollableChannel> extends AbstractMessageChannelMessagingSendingTemplate<T, U, V, D> implements DestinationResolvingMessageReceivingOperations<T, U, V, D> {
+public abstract class AbstractMessageChannelMessagingSendingReceivingTemplate<T, U extends MessageHeaders, V, D extends PollableChannel<T, U>> extends AbstractMessageChannelMessagingSendingTemplate<T, U, V, D> implements DestinationResolvingMessageReceivingOperations<T, U, V, D> {
 
     protected AbstractMessageChannelMessagingSendingReceivingTemplate(DestinationResolver<String> destinationResolver) {
         super(destinationResolver);
@@ -26,13 +26,10 @@ public abstract class AbstractMessageChannelMessagingSendingReceivingTemplate<T,
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public V receiveAndConvert(D destination, Class<V> targetClass) throws MessagingException {
         Message<T, U> message = receive(destination);
-        if (message != null) {
-            return (V) getMessageConverter().fromMessage(message, targetClass);
-        } else {
-            return null;
-        }
+        return (V) getMessageConverter().fromMessage(message, targetClass);
     }
 
     @Override

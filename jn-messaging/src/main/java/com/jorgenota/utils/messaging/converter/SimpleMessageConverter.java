@@ -19,6 +19,7 @@ package com.jorgenota.utils.messaging.converter;
 import com.jorgenota.utils.messaging.GenericMessage;
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
+import org.springframework.lang.Nullable;
 
 /**
  * A simple converter that simply unwraps the message payload as long as it matches the
@@ -30,6 +31,7 @@ import com.jorgenota.utils.messaging.MessageHeaders;
 public class SimpleMessageConverter<T, U extends MessageHeaders, V> implements MessageConverter<T, U, V> {
 
     @Override
+    @SuppressWarnings("unchecked")
     public V fromMessage(Message<T, U> message, Class<V> targetClass) throws MessageConversionException {
         try {
             return (V) message.getPayload();
@@ -39,9 +41,10 @@ public class SimpleMessageConverter<T, U extends MessageHeaders, V> implements M
     }
 
     @Override
-    public Message<T, U> toMessage(V payload, U attributes) throws MessageConversionException {
+    @SuppressWarnings("unchecked")
+    public Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
         try {
-            return new GenericMessage<T, U>((T) payload, attributes);
+            return new GenericMessage<>((T) payload, attributes);
         } catch (ClassCastException e) {
             throw new MessageConversionException("Error converting payload from class " + payload.getClass().getName());
         }

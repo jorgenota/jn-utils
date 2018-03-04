@@ -11,8 +11,8 @@
     </parent>
 
     <artifactId>jn-messaging</artifactId>
-
     <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>com.jorgenota.utils</groupId>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>

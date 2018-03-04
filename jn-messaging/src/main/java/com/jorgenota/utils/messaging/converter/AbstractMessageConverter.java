@@ -19,6 +19,7 @@ package com.jorgenota.utils.messaging.converter;
 import com.jorgenota.utils.messaging.GenericMessage;
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
+import org.springframework.lang.Nullable;
 
 import static com.jorgenota.utils.base.Preconditions.isTrue;
 
@@ -60,7 +61,7 @@ public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> i
     }
 
     @Override
-    public final V fromMessage(Message<T, U> message, Class<V> targetClass) {
+    public final V fromMessage(Message<T, U> message, Class<V> targetClass) throws MessageConversionException {
         try {
             return convertFromInternal(message, targetClass);
         } catch (Exception e) {
@@ -70,9 +71,8 @@ public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> i
     }
 
     @Override
-    public final Message<T, U> toMessage(V payload, U attributes) {
+    public final Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
         try {
-            if (attributes == null) return null;
             T convertedPayload = convertToInternal(payload, attributes);
             return new GenericMessage<T, U>(convertedPayload, attributes);
         } catch (Exception e) {
@@ -98,7 +98,8 @@ public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> i
      * @param payload    the Object to convert
      * @param attributes optional attributes for the message (may be {@code null})
      * @return the resulting payload for the message
-     * @throws Exception if the converter does not support the Object type or the target media type
+     * @throws Exception if the converter does not support the
+     *                   Object type or cannot perform the conversion
      */
-    protected abstract T convertToInternal(V payload, U attributes) throws Exception;
+    protected abstract T convertToInternal(V payload, @Nullable U attributes) throws Exception;
 }

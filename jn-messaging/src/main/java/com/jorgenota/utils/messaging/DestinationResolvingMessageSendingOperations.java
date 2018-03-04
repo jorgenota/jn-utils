@@ -17,6 +17,7 @@
 package com.jorgenota.utils.messaging;
 
 import com.jorgenota.utils.messaging.converter.MessageConverter;
+import org.springframework.lang.Nullable;
 
 /**
  * Extends {@link MessageSendingOperations} and adds operations for sending messages
@@ -54,7 +55,7 @@ public interface DestinationResolvingMessageSendingOperations<T, U extends Messa
      * @param payload         the Object to use as payload
      * @param attributes      attributes for the message to send
      */
-    void convertAndSend(String destinationName, V payload, U attributes)
+    void convertAndSend(String destinationName, V payload, @Nullable U attributes)
             throws MessagingException;
 
     /**
@@ -83,7 +84,7 @@ public interface DestinationResolvingMessageSendingOperations<T, U extends Messa
      * @param attributes      attributes for the message to send
      * @param postProcessor   the post processor to apply to the message
      */
-    void convertAndSend(String destinationName, V payload, U attributes,
+    void convertAndSend(String destinationName, V payload, @Nullable U attributes,
                         MessagePostProcessor<T, U> postProcessor) throws MessagingException;
 
 }

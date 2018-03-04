@@ -16,12 +16,15 @@
 
 package com.jorgenota.utils.messaging;
 
+import org.springframework.lang.Nullable;
+
 /**
  * The base exception for any failures related to messaging.
  */
 @SuppressWarnings("serial")
 public class MessagingException extends RuntimeException {
 
+    @Nullable
     private final Message<?, ?> failedMessage;
 
 
@@ -55,7 +58,7 @@ public class MessagingException extends RuntimeException {
         this.failedMessage = message;
     }
 
-
+    @Nullable
     public Message<?, ?> getFailedMessage() {
         return this.failedMessage;
     }

@@ -24,18 +24,22 @@ public interface PollableChannel<T, U extends MessageHeaders> extends MessageCha
     /**
      * Receive a message from this channel, blocking indefinitely if necessary.
      *
-     * @return the next available {@link Message} or {@code null} if interrupted
+     * @return the next available {@link Message}
+     * @throws MessagingException if the message couldn't be received
      */
-    Message<T, U> receive();
+    default Message<T, U> receive() throws MessagingException {
+        return receive(INDEFINITE_TIMEOUT);
+    }
 
     /**
      * Receive a message from this channel, blocking until either a message is available
      * or the specified timeout period elapses.
      *
      * @param timeout the timeout in milliseconds or {@link MessageChannel#INDEFINITE_TIMEOUT}.
-     * @return the next available {@link Message} or {@code null} if the specified timeout
+     * @return the next available {@link Message}
      * period elapses or the message reception is interrupted
+     * @throws MessagingException if the message couldn't be received
      */
-    Message<T, U> receive(long timeout);
+    Message<T, U> receive(long timeout) throws MessagingException;
 
 }

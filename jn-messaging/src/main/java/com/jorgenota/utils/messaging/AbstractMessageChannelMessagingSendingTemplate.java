@@ -1,9 +1,11 @@
 package com.jorgenota.utils.messaging;
 
+import org.springframework.lang.Nullable;
+
 /**
  * Abstract base class for AWS services messaging templates
  */
-public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extends MessageHeaders, V, D extends MessageChannel> extends AbstractMessageSendingTemplate<T, U, V, D> implements DestinationResolvingMessageSendingOperations<T, U, V, D> {
+public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extends MessageHeaders, V, D extends MessageChannel<T, U>> extends AbstractMessageSendingTemplate<T, U, V, D> implements DestinationResolvingMessageSendingOperations<T, U, V, D> {
 
     private final DestinationResolver<String> destinationResolver;
 
@@ -33,7 +35,7 @@ public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extend
     }
 
     @Override
-    public void convertAndSend(String destinationName, V payload, U attributes) throws MessagingException {
+    public void convertAndSend(String destinationName, V payload, @Nullable U attributes) throws MessagingException {
         D channel = resolveMessageChannelByLogicalName(destinationName);
         convertAndSend(channel, payload, attributes);
     }
@@ -45,7 +47,7 @@ public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extend
     }
 
     @Override
-    public void convertAndSend(String destinationName, V payload, U attributes, MessagePostProcessor<T, U> postProcessor) throws MessagingException {
+    public void convertAndSend(String destinationName, V payload, @Nullable U attributes, MessagePostProcessor<T, U> postProcessor) throws MessagingException {
         D channel = resolveMessageChannelByLogicalName(destinationName);
         convertAndSend(channel, payload, attributes, postProcessor);
     }

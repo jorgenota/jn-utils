@@ -31,6 +31,7 @@ public interface MessageReceivingOperations<T, U extends MessageHeaders, V, D> {
      *
      * @return the received message, possibly {@code null} if the message could not
      * be received, for example due to a timeout
+     * @throws MessagingException if the message couldn't be received
      */
     Message<T, U> receive() throws MessagingException;
 
@@ -40,6 +41,7 @@ public interface MessageReceivingOperations<T, U extends MessageHeaders, V, D> {
      * @param destination the target destination
      * @return the received message, possibly {@code null} if the message could not
      * be received, for example due to a timeout
+     * @throws MessagingException if the message couldn't be received
      */
     Message<T, U> receive(D destination) throws MessagingException;
 
@@ -50,6 +52,7 @@ public interface MessageReceivingOperations<T, U extends MessageHeaders, V, D> {
      * @param targetClass the target class to convert the payload to
      * @return the converted payload of the reply message, possibly {@code null} if
      * the message could not be received, for example due to a timeout
+     * @throws MessagingException if the message couldn't be received
      */
     V receiveAndConvert(Class<V> targetClass) throws MessagingException;
 
@@ -61,6 +64,7 @@ public interface MessageReceivingOperations<T, U extends MessageHeaders, V, D> {
      * @param targetClass the target class to convert the payload to
      * @return the converted payload of the reply message, possibly {@code null} if
      * the message could not be received, for example due to a timeout
+     * @throws MessagingException if the message couldn't be received
      */
     V receiveAndConvert(D destination, Class<V> targetClass) throws MessagingException;
 }

@@ -18,6 +18,7 @@ package com.jorgenota.utils.messaging.converter;
 
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
+import org.springframework.lang.Nullable;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
@@ -56,8 +57,8 @@ public interface MessageConverter<T, U extends MessageHeaders, V> {
      * @param attributes optional attributes for the message (may be {@code null})
      * @return the new message
      * @throws MessageConversionException if the converter does not support the
-     *                                    Object type or the target media type
+     *                                    Object type or cannot perform the conversion
      */
-    Message<T, U> toMessage(V payload, U attributes) throws MessageConversionException;
+    Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException;
 
 }

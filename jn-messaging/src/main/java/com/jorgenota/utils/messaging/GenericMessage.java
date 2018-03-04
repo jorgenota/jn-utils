@@ -16,6 +16,7 @@
 
 package com.jorgenota.utils.messaging;
 
+import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 import java.io.Serializable;
@@ -31,6 +32,7 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
     private static final long serialVersionUID = 4268801052358035098L;
 
     private final T payload;
+    @Nullable
     private final U attributes;
 
     /**
@@ -49,7 +51,7 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
      * @param payload    the message payload (never {@code null})
      * @param attributes message attributes to use for initialization
      */
-    public GenericMessage(T payload, U attributes) {
+    public GenericMessage(T payload, @Nullable U attributes) {
         this.payload = notNull(payload, "Payload must not be null");
         this.attributes = attributes;
     }
@@ -60,6 +62,7 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
     }
 
     @Override
+    @Nullable
     public U getAttributes() {
         return this.attributes;
     }
@@ -74,12 +77,12 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
         }
         GenericMessage<?, ?> otherMsg = (GenericMessage<?, ?>) other;
         // Using nullSafeEquals for proper array equals comparisons
-        return (ObjectUtils.nullSafeEquals(this.payload, otherMsg.payload) && this.attributes.equals(otherMsg.attributes));
+        return (ObjectUtils.nullSafeEquals(this.payload, otherMsg.payload) && ObjectUtils.nullSafeEquals(this.attributes, otherMsg.attributes));
     }
 
     public int hashCode() {
         // Using nullSafeHashCode for proper array hashCode handling
-        return (ObjectUtils.nullSafeHashCode(this.payload) * 23 + this.attributes.hashCode());
+        return (ObjectUtils.nullSafeHashCode(this.payload) * 23 + ObjectUtils.nullSafeHashCode(this.attributes));
     }
 
     public String toString() {

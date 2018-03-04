@@ -32,29 +32,27 @@ public interface MessageChannel<T, U extends MessageHeaders> {
 
 
     /**
-     * Send a {@link Message} to this channel. If the message is sent successfully,
-     * the method returns {@code true}. If the message cannot be sent due to a
-     * non-fatal reason, the method returns {@code false}. The method may also
-     * throw a RuntimeException in case of non-recoverable errors.
+     * Send a {@link Message} to this channel. If the message cannot be sent the
+     * method must throw a MessagingException.
      * <p>This method may block indefinitely, depending on the implementation.
      * To provide a maximum wait time, use {@link #send(Message, long)}.
      *
      * @param message the message to send
-     * @return whether or not the message was sent
+     * @throws MessagingException if the message couldn't be sent
      */
-    default boolean send(Message<T, U> message) {
-        return send(message, INDEFINITE_TIMEOUT);
+    default void send(Message<T, U> message) throws MessagingException {
+        send(message, INDEFINITE_TIMEOUT);
     }
 
     /**
      * Send a message, blocking until either the message is accepted or the
-     * specified timeout period elapses.
+     * specified timeout period elapses. If the message cannot be sent the
+     * method must throw a MessagingException.
      *
      * @param message the message to send
      * @param timeout the timeout in milliseconds or {@link #INDEFINITE_TIMEOUT}
-     * @return {@code true} if the message is sent, {@code false} if not
-     * including a timeout of an interrupt of the send
+     * @throws MessagingException if the message couldn't be sent
      */
-    boolean send(Message<T, U> message, long timeout);
+    void send(Message<T, U> message, long timeout) throws MessagingException;
 
 }

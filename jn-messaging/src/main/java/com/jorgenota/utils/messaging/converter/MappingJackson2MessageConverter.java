@@ -16,7 +16,6 @@
 
 package com.jorgenota.utils.messaging.converter;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -24,12 +23,14 @@ import com.fasterxml.jackson.databind.*;
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import static com.jorgenota.utils.base.ObjectMappingUtils.configureObjectMapper;
 import static com.jorgenota.utils.base.Preconditions.notNull;
 
 /**
@@ -45,7 +46,9 @@ import static com.jorgenota.utils.base.Preconditions.notNull;
 public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> extends AbstractMessageConverter<T, U, V> {
 
     private final JsonEncoding charset;
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = configureObjectMapper();
+
+    @Nullable
     private Boolean prettyPrint;
 
 
@@ -61,14 +64,6 @@ public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> ext
     public MappingJackson2MessageConverter(JsonEncoding charset) {
         super();
         this.charset = charset;
-        initObjectMapper();
-    }
-
-
-    private void initObjectMapper() {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.configure(MapperFeature.DEFAULT_VIEW_INCLUSION, false);
-        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**
@@ -131,7 +126,8 @@ public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> ext
     }
 
     @Override
-    protected T convertToInternal(V payload, U attributes) throws IOException {
+    @SuppressWarnings("unchecked")
+    protected T convertToInternal(V payload, @Nullable U attributes) throws IOException {
         if (byte[].class == getSerializedPayloadClass()) {
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             JsonGenerator generator = this.objectMapper.getFactory().createGenerator(out, this.charset);
@@ -142,14 +138,5 @@ public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> ext
             this.objectMapper.writeValue(writer, payload);
             return (T) writer.toString();
         }
-    }
-
-    private Class<?> extractViewClass(JsonView annotation, Object conversionHint) {
-        Class<?>[] classes = annotation.value();
-        if (classes.length != 1) {
-            throw new IllegalArgumentException(
-                    "@JsonView only supported for handler methods with exactly 1 class argument: " + conversionHint);
-        }
-        return classes[0];
     }
 }

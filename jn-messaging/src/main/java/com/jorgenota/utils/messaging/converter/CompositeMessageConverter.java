@@ -18,6 +18,7 @@ package com.jorgenota.utils.messaging.converter;
 
 import com.jorgenota.utils.messaging.Message;
 import com.jorgenota.utils.messaging.MessageHeaders;
+import org.springframework.lang.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,29 +40,31 @@ public class CompositeMessageConverter<T, U extends MessageHeaders, V> implement
      */
     public CompositeMessageConverter(Collection<MessageConverter> converters) {
         notEmpty(converters, "Converters must not be empty");
-        this.converters = new ArrayList<MessageConverter>(converters);
+        this.converters = new ArrayList<>(converters);
     }
 
 
     @Override
-    public V fromMessage(Message<T, U> message, Class<V> targetClass) {
+    @SuppressWarnings("unchecked")
+    public V fromMessage(Message<T, U> message, Class<V> targetClass) throws MessageConversionException {
         for (MessageConverter converter : getConverters()) {
             try {
                 return (V) converter.fromMessage(message, targetClass);
             } catch (Exception e) {
-                continue;
+                // continue;
             }
         }
         throw new MessageConversionException("Converters couldn't successfully convert the message payload");
     }
 
     @Override
-    public Message<T, U> toMessage(V payload, U attributes) {
+    @SuppressWarnings("unchecked")
+    public Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
         for (MessageConverter converter : getConverters()) {
             try {
                 return converter.toMessage(payload, attributes);
             } catch (Exception e) {
-                continue;
+                // continue;
             }
         }
         throw new MessageConversionException("Converters couldn't successfully convert the payload");
