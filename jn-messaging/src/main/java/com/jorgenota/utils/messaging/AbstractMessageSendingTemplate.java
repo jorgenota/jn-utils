@@ -32,7 +32,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
 
     @Nullable
     private volatile D defaultDestination;
-    private volatile MessageConverter converter = new SimpleMessageConverter();
+    private volatile MessageConverter<T, U, V> converter = new SimpleMessageConverter<>();
 
     /**
      * Configure the default destination to use in send methods that don't have
@@ -46,7 +46,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
     /**
      * Return the configured {@link MessageConverter}.
      */
-    public MessageConverter getMessageConverter() {
+    public MessageConverter<T, U, V> getMessageConverter() {
         return this.converter;
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
      *
      * @param messageConverter the message converter to use
      */
-    public void setMessageConverter(MessageConverter messageConverter) {
+    public void setMessageConverter(MessageConverter<T, U, V> messageConverter) {
         this.converter = notNull(messageConverter, "MessageConverter must not be null");
     }
 
@@ -125,7 +125,6 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
      * @param postProcessor the post processor to apply to the message
      * @return the converted message
      */
-    @SuppressWarnings("unchecked")
     protected Message<T, U> doConvert(V payload, @Nullable U attributes, @Nullable MessagePostProcessor<T, U> postProcessor) {
 
         Message<T, U> message = getMessageConverter().toMessage(payload, attributes);

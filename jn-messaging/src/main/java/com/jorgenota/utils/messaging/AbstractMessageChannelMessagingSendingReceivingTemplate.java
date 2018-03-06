@@ -26,10 +26,9 @@ public abstract class AbstractMessageChannelMessagingSendingReceivingTemplate<T,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public V receiveAndConvert(D destination, Class<V> targetClass) throws MessagingException {
         Message<T, U> message = receive(destination);
-        return (V) getMessageConverter().fromMessage(message, targetClass);
+        return getMessageConverter().fromMessage(message, targetClass);
     }
 
     @Override
