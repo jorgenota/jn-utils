@@ -41,4 +41,8 @@ public class MessageConversionException extends MessagingException {
         super(failedMessage, description, cause);
     }
 
+    @Override
+    public boolean isRetriable() {
+        return false;
+    }
 }

@@ -63,10 +63,15 @@ public class MessagingException extends RuntimeException {
         return this.failedMessage;
     }
 
+    public boolean isRetriable() {
+        return true;
+    }
+
     @Override
     public String toString() {
         return super.toString() + (this.failedMessage == null ? ""
-                : (", failedMessage=" + this.failedMessage));
+                : (", failedMessage=" + this.failedMessage))
+                + ", retryable=" + isRetriable();
     }
 
 }

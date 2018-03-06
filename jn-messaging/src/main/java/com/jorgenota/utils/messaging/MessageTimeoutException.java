@@ -34,8 +34,4 @@ public class MessageTimeoutException extends MessageDeliveryException {
         super(failedMessage, description);
     }
 
-    public MessageTimeoutException(Message<?, ?> failedMessage) {
-        super(failedMessage);
-    }
-
 }

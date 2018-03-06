@@ -30,4 +30,8 @@ public class DestinationResolutionException extends MessagingException {
         super(description, cause);
     }
 
+    @Override
+    public boolean isRetriable() {
+        return false;
+    }
 }

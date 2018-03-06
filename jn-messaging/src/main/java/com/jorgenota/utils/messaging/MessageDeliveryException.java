@@ -17,7 +17,7 @@
 package com.jorgenota.utils.messaging;
 
 /**
- * Exception that indicates an error occurred during message delivery.
+ * Exception that indicates an error occurred during message delivery (sending or receiving).
  */
 @SuppressWarnings("serial")
 public class MessageDeliveryException extends MessagingException {
@@ -26,16 +26,16 @@ public class MessageDeliveryException extends MessagingException {
         super(description);
     }
 
-    public MessageDeliveryException(Message<?, ?> undeliveredMessage) {
-        super(undeliveredMessage);
+    public MessageDeliveryException(String description, Throwable cause) {
+        super(description, cause);
     }
 
     public MessageDeliveryException(Message<?, ?> undeliveredMessage, String description) {
         super(undeliveredMessage, description);
     }
 
-    public MessageDeliveryException(Message<?, ?> message, Throwable cause) {
-        super(message, cause);
+    public MessageDeliveryException(Message<?, ?> undeliveredMessage, Throwable cause) {
+        super(undeliveredMessage, cause);
     }
 
     public MessageDeliveryException(Message<?, ?> undeliveredMessage, String description, Throwable cause) {
