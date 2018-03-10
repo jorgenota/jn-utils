@@ -13,15 +13,15 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 /**
  *
  */
-public class PreconditionsTests {
+class PreconditionsTests {
 
     @Test
-    public void testIsTrue() {
+    void testIsTrue() {
         Preconditions.isTrue(true, "enigma");
     }
 
     @Test
-    public void testIsTrueWithFalse() {
+    void testIsTrueWithFalse() {
         try {
             Preconditions.isTrue(false, "enigma");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -31,8 +31,9 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testIsTrueWithFalseAndNullMessage() {
+    void testIsTrueWithFalseAndNullMessage() {
         try {
+            //noinspection ConstantConditions
             Preconditions.isTrue(false, null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
@@ -41,12 +42,12 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testIsTrueWithMessageWithArgs() {
+    void testIsTrueWithMessageWithArgs() {
         Preconditions.isTrue(true, "bla %s %d", "A", 4);
     }
 
     @Test
-    public void testIsTrueWithFalseAndMessageWithArgs() {
+    void testIsTrueWithFalseAndMessageWithArgs() {
         try {
             Preconditions.isTrue(false, "bla %s %d", "A", 4);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -56,12 +57,12 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testState() {
+    void testState() {
         Preconditions.state(true, "enigma");
     }
 
     @Test
-    public void testStateWithFalse() {
+    void testStateWithFalse() {
         try {
             Preconditions.state(false, "enigma");
             failBecauseExceptionWasNotThrown(IllegalStateException.class);
@@ -71,8 +72,9 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testStateWithFalseAndNullMessage() {
+    void testStateWithFalseAndNullMessage() {
         try {
+            //noinspection ConstantConditions
             Preconditions.state(false, null);
             failBecauseExceptionWasNotThrown(IllegalStateException.class);
         } catch (IllegalStateException e) {
@@ -81,12 +83,12 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testStateWithMessageWithArgs() {
+    void testStateWithMessageWithArgs() {
         Preconditions.state(true, "bla %s %d", "A", 4);
     }
 
     @Test
-    public void testStateWithFalseAndMessageWithArgs() {
+    void testStateWithFalseAndMessageWithArgs() {
         try {
             Preconditions.state(false, "bla %s %d", "A", 4);
             failBecauseExceptionWasNotThrown(IllegalStateException.class);
@@ -96,14 +98,14 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotNull() {
-        Integer i = new Integer(5);
+    void testNotNull() {
+        Integer i = 5;
         Integer result = Preconditions.notNull(i, "enigma");
         assertThat(result).isSameAs(i);
     }
 
     @Test
-    public void testNotNullWithNull() {
+    void testNotNullWithNull() {
         try {
             Preconditions.notNull(null, "enigma");
             failBecauseExceptionWasNotThrown(NullPointerException.class);
@@ -113,13 +115,13 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testHasLength() {
+    void testHasLength() {
         Preconditions.hasLength("I Heart ...", "enigma");
         Preconditions.hasLength("\t  ", "enigma");
     }
 
     @Test
-    public void testHasLengthWithEmptyString() {
+    void testHasLengthWithEmptyString() {
         try {
             Preconditions.hasLength("", "enigma hasLength");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -129,7 +131,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testHasLengthWithNull() {
+    void testHasLengthWithNull() {
         try {
             Preconditions.hasLength(null, "enigma");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -139,12 +141,12 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testHasText() {
+    void testHasText() {
         Preconditions.hasText("I Heart ...", "enigma");
     }
 
     @Test
-    public void testHasTextWithEmptyString() {
+    void testHasTextWithEmptyString() {
         try {
             Preconditions.hasText("", "enigma hasText");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -154,7 +156,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testHasTextWithNull() {
+    void testHasTextWithNull() {
         try {
             Preconditions.hasText(null, "enigma hasText");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -164,7 +166,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testHasTextWithWhitespace() {
+    void testHasTextWithWhitespace() {
         try {
             Preconditions.hasText("    \t \n  ", "enigma hasText");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -174,13 +176,13 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testEmptyArray() {
+    void testEmptyArray() {
         Preconditions.empty(new String[]{}, "enigma");
         Preconditions.empty(null, "enigma");
     }
 
     @Test
-    public void testEmptyArrayWithNotEmptyArray() {
+    void testEmptyArrayWithNotEmptyArray() {
         try {
             Preconditions.empty(new String[]{null}, "enigma empty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -197,7 +199,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testEmptyCollections() {
+    void testEmptyCollections() {
         Preconditions.empty("", "enigma");
         Preconditions.empty((Collection<?>) null, "enigma");
         Preconditions.empty((Map<?, ?>) null, "enigma");
@@ -207,13 +209,13 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyArray() {
+    void testNotEmptyArray() {
         Preconditions.notEmpty(new String[]{"1234"}, "enigma");
         Preconditions.notEmpty(new String[]{null}, "enigma");
     }
 
     @Test
-    public void testNotEmptyArrayWithEmptyArray() {
+    void testNotEmptyArrayWithEmptyArray() {
         try {
             Preconditions.notEmpty(new String[]{}, "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -223,9 +225,9 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyArrayWithNullArray() {
+    void testNotEmptyArrayWithNullArray() {
         try {
-            Preconditions.notEmpty((Object[]) null, "enigma notEmpty");
+            Preconditions.notEmpty(null, "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
             assertThat(e).hasMessage("enigma notEmpty");
@@ -234,7 +236,7 @@ public class PreconditionsTests {
 
 
     @Test
-    public void testNotEmptyObject() {
+    void testNotEmptyObject() {
         Preconditions.notEmpty("I Heart ...", "enigma");
         Preconditions.notEmpty(5, "enigma");
         Preconditions.notEmpty(singletonMap("foo", "bar"), "enigma");
@@ -243,7 +245,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithEmptyString() {
+    void testNotEmptyWithEmptyString() {
         try {
             Preconditions.notEmpty("", "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -253,7 +255,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithNullCollection() {
+    void testNotEmptyWithNullCollection() {
         try {
             Preconditions.notEmpty((Collection<?>) null, "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -263,7 +265,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithEmptyCollection() {
+    void testNotEmptyWithEmptyCollection() {
         try {
             Preconditions.notEmpty(emptyList(), "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -273,7 +275,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithNullMap() {
+    void testNotEmptyWithNullMap() {
         try {
             Preconditions.notEmpty((Map<?, ?>) null, "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -283,7 +285,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithEmptyMap() {
+    void testNotEmptyWithEmptyMap() {
         try {
             Preconditions.notEmpty(emptyMap(), "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -293,7 +295,7 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNotEmptyWithEmptyOptional() {
+    void testNotEmptyWithEmptyOptional() {
         try {
             Preconditions.notEmpty(Optional.empty(), "enigma notEmpty");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -303,13 +305,13 @@ public class PreconditionsTests {
     }
 
     @Test
-    public void testNoNullElements() {
+    void testNoNullElements() {
         Preconditions.noNullElements(new String[]{"1234"}, "enigma");
         Preconditions.noNullElements(new String[]{}, "enigma");
     }
 
     @Test
-    public void testNoNullElementsWithNullElements() {
+    void testNoNullElementsWithNullElements() {
         try {
             Preconditions.noNullElements(new String[]{"foo", null, "bar"}, "enigma notNull");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);

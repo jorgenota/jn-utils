@@ -10,32 +10,32 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Jorge Alonso
  */
-public class WaitStrategiesTests {
+class WaitStrategiesTests {
 
 
     @Test
-    public void testNoWait() {
+    void testNoWait() {
         WaitStrategy noWait = WaitStrategies.noWait();
         assertThat(noWait.computeSleepTime(failedAttempt(18, 9879L))).isEqualTo(0);
     }
 
     @Test
-    public void testFixedWait() {
+    void testFixedWait() {
         WaitStrategy fixedWait = WaitStrategies.fixedWait(1000L);
         assertThat(fixedWait.computeSleepTime(failedAttempt(12, 6546L))).isEqualTo(1000L);
     }
 
     @Test
-    public void testIncrementingWait() {
+    void testIncrementingWait() {
         WaitStrategy incrementingWait = WaitStrategies.incrementingWait(500L, 100L);
         assertThat(incrementingWait.computeSleepTime(failedAttempt(1, 6546L))).isEqualTo(500L);
         assertThat(incrementingWait.computeSleepTime(failedAttempt(3, 6546L))).isEqualTo(700L);
     }
 
     @Test
-    public void testRandomWait() {
+    void testRandomWait() {
         WaitStrategy randomWait = WaitStrategies.randomWait(1900L, 2000L);
-        Set<Long> times = new HashSet();
+        Set<Long> times = new HashSet<>();
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
@@ -48,9 +48,9 @@ public class WaitStrategiesTests {
     }
 
     @Test
-    public void testRandomWaitWithoutMinimum() {
+    void testRandomWaitWithoutMinimum() {
         WaitStrategy randomWait = WaitStrategies.randomWait(200L);
-        Set<Long> times = new HashSet();
+        Set<Long> times = new HashSet<>();
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
         times.add(randomWait.computeSleepTime(failedAttempt(1, 6546L)));
@@ -63,7 +63,7 @@ public class WaitStrategiesTests {
     }
 
     @Test
-    public void testExponential() {
+    void testExponential() {
         WaitStrategy exponentialWait = WaitStrategies.exponentialWait();
         assertThat(exponentialWait.computeSleepTime(failedAttempt(1, 6546L))).isEqualTo(2);
         assertThat(exponentialWait.computeSleepTime(failedAttempt(2, 0))).isEqualTo(4);
@@ -72,7 +72,7 @@ public class WaitStrategiesTests {
     }
 
     @Test
-    public void testExponentialWithMaximumWait() {
+    void testExponentialWithMaximumWait() {
         WaitStrategy exponentialWait = WaitStrategies.exponentialWait(40);
         assertThat(exponentialWait.computeSleepTime(failedAttempt(1, 6546L))).isEqualTo(2);
         assertThat(exponentialWait.computeSleepTime(failedAttempt(2, 0))).isEqualTo(4);
@@ -82,7 +82,7 @@ public class WaitStrategiesTests {
     }
 
     @Test
-    public void testExponentialWithMultiplierAndMaximumWait() {
+    void testExponentialWithMultiplierAndMaximumWait() {
         WaitStrategy exponentialWait = WaitStrategies.exponentialWait(1000, 50000);
         assertThat(exponentialWait.computeSleepTime(failedAttempt(1, 6546L))).isEqualTo(2000);
         assertThat(exponentialWait.computeSleepTime(failedAttempt(2, 0))).isEqualTo(4000);
@@ -91,7 +91,7 @@ public class WaitStrategiesTests {
         assertThat(exponentialWait.computeSleepTime(failedAttempt(Integer.MAX_VALUE, 0))).isEqualTo(50000);
     }
 
-    public FailedAttempt failedAttempt(long attemptNumber, long delaySinceFirstAttempt) {
+    private FailedAttempt failedAttempt(long attemptNumber, long delaySinceFirstAttempt) {
         return new FailedAttempt(new RuntimeException(), attemptNumber, delaySinceFirstAttempt);
     }
 }

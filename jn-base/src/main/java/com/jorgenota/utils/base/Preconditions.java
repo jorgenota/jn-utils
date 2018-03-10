@@ -1,5 +1,6 @@
 package com.jorgenota.utils.base;
 
+import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -100,7 +101,7 @@ public final class Preconditions {
      * @return the non-null reference that was validated
      * @throws NullPointerException if {@code reference} is null
      */
-    public static <T> T notNull(T reference, Object errorMessage) {
+    public static <T> T notNull(@Nullable T reference, Object errorMessage) {
         if (reference == null) {
             throw new NullPointerException(String.valueOf(errorMessage));
         }
@@ -117,7 +118,7 @@ public final class Preconditions {
      *                     string using {@link String#valueOf(Object)}
      * @throws IllegalArgumentException if the text is empty
      */
-    public static void hasLength(CharSequence text, Object errorMessage) {
+    public static void hasLength(@Nullable CharSequence text, Object errorMessage) {
         if (!StringUtils.hasLength(text)) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
@@ -133,7 +134,7 @@ public final class Preconditions {
      *                     string using {@link String#valueOf(Object)}
      * @throws IllegalArgumentException if the text is empty
      */
-    public static void hasText(CharSequence text, Object errorMessage) {
+    public static void hasText(@Nullable CharSequence text, Object errorMessage) {
         if (!StringUtils.hasText(text)) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
@@ -148,7 +149,7 @@ public final class Preconditions {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object array is {@code null} or contains no elements
      */
-    public static void notEmpty(Object[] array, String message) {
+    public static void notEmpty(@Nullable Object[] array, String message) {
         if (ObjectUtils.isEmpty(array)) {
             throw new IllegalArgumentException(message);
         }
@@ -165,7 +166,7 @@ public final class Preconditions {
      *                                  contains no elements
      * @see ObjectUtils#isEmpty(Object)
      */
-    public static void notEmpty(Object object, String message) {
+    public static void notEmpty(@Nullable Object object, String message) {
         if (ObjectUtils.isEmpty(object)) {
             throw new IllegalArgumentException(message);
         }
@@ -180,7 +181,7 @@ public final class Preconditions {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object array contains elements
      */
-    public static void empty(Object[] array, String message) {
+    public static void empty(@Nullable Object[] array, String message) {
         if (!ObjectUtils.isEmpty(array)) {
             throw new IllegalArgumentException(message);
         }
@@ -197,7 +198,7 @@ public final class Preconditions {
      *                                  contains elements
      * @see ObjectUtils#isEmpty(Object)
      */
-    public static void empty(Object object, String message) {
+    public static void empty(@Nullable Object object, String message) {
         if (!ObjectUtils.isEmpty(object)) {
             throw new IllegalArgumentException(message);
         }
@@ -212,7 +213,7 @@ public final class Preconditions {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object array contains a {@code null} element
      */
-    public static void noNullElements(Object[] array, String message) {
+    public static void noNullElements(@Nullable Object[] array, String message) {
         if (array != null) {
             for (Object element : array) {
                 if (element == null) {

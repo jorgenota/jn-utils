@@ -5,8 +5,6 @@ package com.jorgenota.utils.retry;
  */
 public class ExhaustedRetryException extends RetryException {
 
-    FailedAttempt failedAttempt;
-
     public ExhaustedRetryException(FailedAttempt failedAttempt) {
         this("Retry exhausted after " + failedAttempt.getAttemptNumber() + " attempts.", failedAttempt);
     }

@@ -10,8 +10,8 @@ import static com.jorgenota.utils.base.Preconditions.notNull;
 public class RetrierBuilder {
     private static final int DEFAULT_ATTEMPT_NUMBER = 10;
 
-    private StopStrategy stopStrategy;
-    private WaitStrategy waitStrategy;
+    private StopStrategy stopStrategy = StopStrategies.stopAfterAttempt(DEFAULT_ATTEMPT_NUMBER);
+    private WaitStrategy waitStrategy = WaitStrategies.noWait();
     private Predicate<FailedAttempt> failPredicate = (x -> false);
 
     private static final Retrier DEFAULT_RETRIER = newBuilder().build();
@@ -117,10 +117,7 @@ public class RetrierBuilder {
      * @return the built retrier.
      */
     public Retrier build() {
-        StopStrategy theStopStrategy = stopStrategy == null ? StopStrategies.stopAfterAttempt(DEFAULT_ATTEMPT_NUMBER) : stopStrategy;
-        WaitStrategy theWaitStrategy = waitStrategy == null ? WaitStrategies.noWait() : waitStrategy;
-
-        return new Retrier(theStopStrategy, theWaitStrategy, failPredicate);
+        return new Retrier(stopStrategy, waitStrategy, failPredicate);
     }
 
     private static final class ExceptionClassPredicate implements Predicate<FailedAttempt> {

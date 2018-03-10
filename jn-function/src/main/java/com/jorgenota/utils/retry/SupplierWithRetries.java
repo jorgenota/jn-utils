@@ -1,6 +1,7 @@
 package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.SupplierWithExceptions;
+import org.springframework.lang.Nullable;
 
 import java.util.function.Supplier;
 
@@ -9,6 +10,7 @@ import java.util.function.Supplier;
  */
 public abstract class SupplierWithRetries<T, E extends Exception> extends DoerWithRetries implements Supplier<T> {
     @Override
+    @Nullable
     public final T get() {
         try {
             return getRetrier().get((SupplierWithExceptions<T, E>) this::getWithRetries);
@@ -18,5 +20,6 @@ public abstract class SupplierWithRetries<T, E extends Exception> extends DoerWi
         return null;
     }
 
+    @Nullable
     abstract T getWithRetries() throws E;
 }

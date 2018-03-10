@@ -12,23 +12,21 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 /**
  * @author Jorge Alonso
  */
-public class DoerWithRetriesTests {
+class DoerWithRetriesTests {
 
-    private static final RetryExceptionHandler rethrowingRetryExceptionHandler = new RetryExceptionHandler() {
-        @Override
-        public void handleRetryException(RetryException e) {
-            throw new RuntimeException(e);
-        }
+    private static final RetryExceptionHandler rethrowingRetryExceptionHandler = e -> {
+        throw new RuntimeException(e);
     };
-    Retrier retrier = RetrierBuilder.newBuilder().failIfExceptionOfType(IOException.class).build();
+
+    private Retrier retrier = RetrierBuilder.newBuilder().failIfExceptionOfType(IOException.class).build();
 
     @Nested
     @DisplayName("Testing BiConsumerWithRetries")
     class testBiConsumerWithRetries {
 
         @Test
-        public void testSucceedingBiConsumerWithRetries() {
-            BiConsumerWithRetries biConsumerWithRetries = new BiConsumerWithRetries() {
+        void testSucceedingBiConsumerWithRetries() {
+            BiConsumerWithRetries<Object, Object, Exception> biConsumerWithRetries = new BiConsumerWithRetries<Object, Object, Exception>() {
                 @Override
                 void acceptWithRetries(Object o, Object o2) throws Exception {
                     // Do nothing
@@ -38,8 +36,8 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiConsumerWithRetriesUsingDefaultExceptionHandler() {
-            BiConsumerWithRetries biConsumerWithRetries = new BiConsumerWithRetries() {
+        void testFailingBiConsumerWithRetriesUsingDefaultExceptionHandler() {
+            BiConsumerWithRetries<Object, Object, Exception> biConsumerWithRetries = new BiConsumerWithRetries<Object, Object, Exception>() {
                 @Override
                 void acceptWithRetries(Object o, Object o2) throws Exception {
                     throw new NullPointerException();
@@ -49,8 +47,8 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiConsumerWithRetriesUsingRetryExceptionHandler() {
-            BiConsumerWithRetries biConsumerWithRetries = new BiConsumerWithRetries() {
+        void testFailingBiConsumerWithRetriesUsingRetryExceptionHandler() {
+            BiConsumerWithRetries<Object, Object, Exception> biConsumerWithRetries = new BiConsumerWithRetries<Object, Object, Exception>() {
                 @Override
                 void acceptWithRetries(Object o, Object o2) throws Exception {
                     throw new IOException();
@@ -60,8 +58,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -73,10 +69,10 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiConsumerWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
-            BiConsumerWithRetries biConsumerWithRetries = new BiConsumerWithRetries() {
+        void testFailingBiConsumerWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+            BiConsumerWithRetries<Object, Object, IOException> biConsumerWithRetries = new BiConsumerWithRetries<Object, Object, IOException>() {
                 @Override
-                void acceptWithRetries(Object o, Object o2) throws Exception {
+                void acceptWithRetries(Object o, Object o2) throws IOException {
                     throw new IOException();
                 }
 
@@ -84,8 +80,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {
@@ -107,7 +101,7 @@ public class DoerWithRetriesTests {
     class testBiFunctionWithRetries {
 
         @Test
-        public void testSucceedingBiFunctionWithRetries() {
+        void testSucceedingBiFunctionWithRetries() {
             BiFunctionWithRetries<Integer, Integer, Integer, NullPointerException> biFunctionWithRetries = new BiFunctionWithRetries<Integer, Integer, Integer, NullPointerException>() {
                 @Override
                 Integer applyWithRetries(Integer o, Integer o2) throws NullPointerException {
@@ -119,7 +113,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiFunctionWithRetriesUsingDefaultExceptionHandler() {
+        void testFailingBiFunctionWithRetriesUsingDefaultExceptionHandler() {
             BiFunctionWithRetries<Integer, Integer, Integer, NullPointerException> biFunctionWithRetries = new BiFunctionWithRetries<Integer, Integer, Integer, NullPointerException>() {
                 @Override
                 Integer applyWithRetries(Integer o, Integer o2) throws NullPointerException {
@@ -131,7 +125,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiFunctionWithRetriesUsingRetryExceptionHandler() {
+        void testFailingBiFunctionWithRetriesUsingRetryExceptionHandler() {
             BiFunctionWithRetries<Integer, Integer, Integer, IOException> biFunctionWithRetries = new BiFunctionWithRetries<Integer, Integer, Integer, IOException>() {
                 @Override
                 Integer applyWithRetries(Integer o, Integer o2) throws IOException {
@@ -142,8 +136,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -155,7 +147,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingBiFunctionWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+        void testFailingBiFunctionWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
             BiFunctionWithRetries<Integer, Integer, Integer, IOException> biFunctionWithRetries = new BiFunctionWithRetries<Integer, Integer, Integer, IOException>() {
                 @Override
                 Integer applyWithRetries(Integer o, Integer o2) throws IOException {
@@ -166,8 +158,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {
@@ -189,8 +179,8 @@ public class DoerWithRetriesTests {
     class testConsumerWithRetries {
 
         @Test
-        public void testSucceedingConsumerWithRetries() {
-            ConsumerWithRetries consumerWithRetries = new ConsumerWithRetries() {
+        void testSucceedingConsumerWithRetries() {
+            ConsumerWithRetries<Object, Exception> consumerWithRetries = new ConsumerWithRetries<Object, Exception>() {
                 @Override
                 void acceptWithRetries(Object o) throws Exception {
                     // Do nothing
@@ -200,8 +190,8 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingConsumerWithRetriesUsingDefaultExceptionHandler() {
-            ConsumerWithRetries consumerWithRetries = new ConsumerWithRetries<Object, NullPointerException>() {
+        void testFailingConsumerWithRetriesUsingDefaultExceptionHandler() {
+            ConsumerWithRetries<Object, NullPointerException> consumerWithRetries = new ConsumerWithRetries<Object, NullPointerException>() {
                 @Override
                 void acceptWithRetries(Object o) throws NullPointerException {
                     throw new NullPointerException();
@@ -211,8 +201,8 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingConsumerWithRetriesUsingRetryExceptionHandler() {
-            ConsumerWithRetries consumerWithRetries = new ConsumerWithRetries<Object, IOException>() {
+        void testFailingConsumerWithRetriesUsingRetryExceptionHandler() {
+            ConsumerWithRetries<Object, IOException> consumerWithRetries = new ConsumerWithRetries<Object, IOException>() {
                 @Override
                 void acceptWithRetries(Object o) throws IOException {
                     throw new IOException();
@@ -222,8 +212,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -235,8 +223,8 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingConsumerWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
-            ConsumerWithRetries consumerWithRetries = new ConsumerWithRetries<Object, IOException>() {
+        void testFailingConsumerWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+            ConsumerWithRetries<Object, IOException> consumerWithRetries = new ConsumerWithRetries<Object, IOException>() {
                 @Override
                 void acceptWithRetries(Object o) throws IOException {
                     throw new IOException();
@@ -267,7 +255,7 @@ public class DoerWithRetriesTests {
     class testFunctionWithRetries {
 
         @Test
-        public void testSucceedingFunctionWithRetries() {
+        void testSucceedingFunctionWithRetries() {
             FunctionWithRetries<Integer, Integer, NullPointerException> functionWithRetries = new FunctionWithRetries<Integer, Integer, NullPointerException>() {
                 @Override
                 Integer applyWithRetries(Integer o) throws NullPointerException {
@@ -279,7 +267,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingFunctionWithRetriesUsingDefaultExceptionHandler() {
+        void testFailingFunctionWithRetriesUsingDefaultExceptionHandler() {
             FunctionWithRetries<Integer, Integer, NullPointerException> functionWithRetries = new FunctionWithRetries<Integer, Integer, NullPointerException>() {
                 @Override
                 Integer applyWithRetries(Integer o) throws NullPointerException {
@@ -291,7 +279,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingFunctionWithRetriesUsingRetryExceptionHandler() {
+        void testFailingFunctionWithRetriesUsingRetryExceptionHandler() {
             FunctionWithRetries<Integer, Integer, IOException> functionWithRetries = new FunctionWithRetries<Integer, Integer, IOException>() {
                 @Override
                 Integer applyWithRetries(Integer o) throws IOException {
@@ -302,8 +290,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -315,7 +301,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingFunctionWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+        void testFailingFunctionWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
             FunctionWithRetries<Integer, Integer, IOException> functionWithRetries = new FunctionWithRetries<Integer, Integer, IOException>() {
                 @Override
                 Integer applyWithRetries(Integer o) throws IOException {
@@ -326,8 +312,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {
@@ -349,7 +333,7 @@ public class DoerWithRetriesTests {
     class testRunnableWithRetries {
 
         @Test
-        public void testSucceedingRunnableWithRetries() {
+        void testSucceedingRunnableWithRetries() {
             RunnableWithRetries runnableWithRetries = new RunnableWithRetries() {
                 @Override
                 void runWithRetries() throws Exception {
@@ -360,7 +344,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingRunnableWithRetriesUsingDefaultExceptionHandler() {
+        void testFailingRunnableWithRetriesUsingDefaultExceptionHandler() {
             RunnableWithRetries runnableWithRetries = new RunnableWithRetries<NullPointerException>() {
                 @Override
                 void runWithRetries() throws NullPointerException {
@@ -371,7 +355,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingRunnableWithRetriesUsingRetryExceptionHandler() {
+        void testFailingRunnableWithRetriesUsingRetryExceptionHandler() {
             RunnableWithRetries runnableWithRetries = new RunnableWithRetries<IOException>() {
                 @Override
                 void runWithRetries() throws IOException {
@@ -382,8 +366,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -395,7 +377,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingRunnableWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+        void testFailingRunnableWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
             RunnableWithRetries runnableWithRetries = new RunnableWithRetries<IOException>() {
                 @Override
                 void runWithRetries() throws IOException {
@@ -406,8 +388,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {
@@ -429,7 +409,7 @@ public class DoerWithRetriesTests {
     class testCallableWithRetries {
 
         @Test
-        public void testSucceedingCallableWithRetries() {
+        void testSucceedingCallableWithRetries() {
             CallableWithRetries<Integer> callableWithRetries = new CallableWithRetries<Integer>() {
                 @Override
                 Integer callWithRetries() throws NullPointerException {
@@ -441,7 +421,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingCallableWithRetriesUsingDefaultExceptionHandler() {
+        void testFailingCallableWithRetriesUsingDefaultExceptionHandler() {
             CallableWithRetries<Integer> callableWithRetries = new CallableWithRetries<Integer>() {
                 @Override
                 Integer callWithRetries() throws NullPointerException {
@@ -453,7 +433,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingCallableWithRetriesUsingRetryExceptionHandler() {
+        void testFailingCallableWithRetriesUsingRetryExceptionHandler() {
             CallableWithRetries<Integer> callableWithRetries = new CallableWithRetries<Integer>() {
                 @Override
                 Integer callWithRetries() throws IOException {
@@ -464,8 +444,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -477,7 +455,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingCallableWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+        void testFailingCallableWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
             CallableWithRetries<Integer> callableWithRetries = new CallableWithRetries<Integer>() {
                 @Override
                 Integer callWithRetries() throws IOException {
@@ -488,8 +466,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {
@@ -511,7 +487,7 @@ public class DoerWithRetriesTests {
     class testSupplierWithRetries {
 
         @Test
-        public void testSucceedingSupplierWithRetries() {
+        void testSucceedingSupplierWithRetries() {
             SupplierWithRetries<Integer, NullPointerException> supplierWithRetries = new SupplierWithRetries<Integer, NullPointerException>() {
                 @Override
                 Integer getWithRetries() throws NullPointerException {
@@ -523,7 +499,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingSupplierWithRetriesUsingDefaultExceptionHandler() {
+        void testFailingSupplierWithRetriesUsingDefaultExceptionHandler() {
             SupplierWithRetries<Integer, NullPointerException> supplierWithRetries = new SupplierWithRetries<Integer, NullPointerException>() {
                 @Override
                 Integer getWithRetries() throws NullPointerException {
@@ -535,7 +511,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingSupplierWithRetriesUsingRetryExceptionHandler() {
+        void testFailingSupplierWithRetriesUsingRetryExceptionHandler() {
             SupplierWithRetries<Integer, IOException> supplierWithRetries = new SupplierWithRetries<Integer, IOException>() {
                 @Override
                 Integer getWithRetries() throws IOException {
@@ -546,8 +522,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
             };
 
             try {
@@ -559,7 +533,7 @@ public class DoerWithRetriesTests {
         }
 
         @Test
-        public void testFailingSupplierWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
+        void testFailingSupplierWithRetriesUsingRetryExceptionHandlerAndFailingRetrier() {
             SupplierWithRetries<Integer, IOException> supplierWithRetries = new SupplierWithRetries<Integer, IOException>() {
                 @Override
                 Integer getWithRetries() throws IOException {
@@ -570,8 +544,6 @@ public class DoerWithRetriesTests {
                 protected RetryExceptionHandler getRetryExceptionHandler() {
                     return rethrowingRetryExceptionHandler;
                 }
-
-                ;
 
                 @Override
                 protected Retrier getRetrier() {

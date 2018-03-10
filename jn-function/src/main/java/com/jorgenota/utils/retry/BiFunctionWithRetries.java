@@ -1,6 +1,7 @@
 package com.jorgenota.utils.retry;
 
 import com.jorgenota.utils.function.BiFunctionWithExceptions;
+import org.springframework.lang.Nullable;
 
 import java.util.function.BiFunction;
 
@@ -9,6 +10,7 @@ import java.util.function.BiFunction;
  */
 public abstract class BiFunctionWithRetries<T, U, R, E extends Exception> extends DoerWithRetries implements BiFunction<T, U, R> {
     @Override
+    @Nullable
     public final R apply(T t, U u) {
         try {
             return getRetrier().apply((BiFunctionWithExceptions<T, U, R, E>) this::applyWithRetries, t, u);
@@ -18,5 +20,6 @@ public abstract class BiFunctionWithRetries<T, U, R, E extends Exception> extend
         return null;
     }
 
+    @Nullable
     abstract R applyWithRetries(T t, U u) throws E;
 }

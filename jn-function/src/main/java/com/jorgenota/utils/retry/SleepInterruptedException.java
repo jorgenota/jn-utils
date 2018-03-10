@@ -5,8 +5,6 @@ package com.jorgenota.utils.retry;
  */
 public class SleepInterruptedException extends RetryException {
 
-    FailedAttempt failedAttempt;
-
     public SleepInterruptedException(FailedAttempt failedAttempt) {
         this("Thread interrupted while sleeping after " + failedAttempt.getAttemptNumber() + " attempts.", failedAttempt);
     }

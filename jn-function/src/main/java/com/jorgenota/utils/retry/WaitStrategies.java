@@ -114,7 +114,7 @@ public final class WaitStrategies {
     private static final class FixedWaitStrategy implements WaitStrategy {
         private final long sleepTime;
 
-        public FixedWaitStrategy(long sleepTime) {
+        private FixedWaitStrategy(long sleepTime) {
             Preconditions.isTrue(sleepTime >= 0L,
                 "sleepTime must be >= 0 but is %d", sleepTime);
             this.sleepTime = sleepTime;
@@ -131,7 +131,7 @@ public final class WaitStrategies {
         private final long minimum;
         private final long maximum;
 
-        public RandomWaitStrategy(long minimum, long maximum) {
+        private RandomWaitStrategy(long minimum, long maximum) {
             Preconditions.isTrue(minimum >= 0,
                 "minimum must be >= 0 but is %d", minimum);
             Preconditions.isTrue(maximum > minimum,
@@ -152,8 +152,8 @@ public final class WaitStrategies {
         private final long initialSleepTime;
         private final long increment;
 
-        public IncrementingWaitStrategy(long initialSleepTime,
-                                        long increment) {
+        private IncrementingWaitStrategy(long initialSleepTime,
+                                         long increment) {
             Preconditions.isTrue(initialSleepTime >= 0L,
                 "initialSleepTime must be >= 0 but is %d", initialSleepTime);
             this.initialSleepTime = initialSleepTime;
@@ -171,8 +171,8 @@ public final class WaitStrategies {
         private final long multiplier;
         private final long maximumWait;
 
-        public ExponentialWaitStrategy(long multiplier,
-                                       long maximumWait) {
+        private ExponentialWaitStrategy(long multiplier,
+                                        long maximumWait) {
             Preconditions.isTrue(multiplier > 0L,
                 "multiplier must be > 0 but is %d", multiplier);
             Preconditions.isTrue(maximumWait >= 0L,

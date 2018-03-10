@@ -5,8 +5,6 @@ package com.jorgenota.utils.retry;
  */
 public class FailException extends RetryException {
 
-    FailedAttempt failedAttempt;
-
     public FailException(FailedAttempt failedAttempt) {
         this("Retrying failed and was aborted after " + failedAttempt.getAttemptNumber() + " attempts.", failedAttempt);
     }

@@ -7,22 +7,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Jorge Alonso
  */
-public class StopStrategiesTests {
+class StopStrategiesTests {
 
     @Test
-    public void testNeverStop() {
+    void testNeverStop() {
         assertThat(StopStrategies.neverStop().shouldStop(failedAttempt(3, 6546L))).isFalse();
     }
 
     @Test
-    public void testStopAfterAttempt() {
+    void testStopAfterAttempt() {
         assertThat(StopStrategies.stopAfterAttempt(3).shouldStop(failedAttempt(2, 6546L))).isFalse();
         assertThat(StopStrategies.stopAfterAttempt(3).shouldStop(failedAttempt(3, 6546L))).isTrue();
         assertThat(StopStrategies.stopAfterAttempt(3).shouldStop(failedAttempt(4, 6546L))).isTrue();
     }
 
     @Test
-    public void testStopAfterDelay() {
+    void testStopAfterDelay() {
         assertThat(StopStrategies.stopAfterDelay(1000L).shouldStop(failedAttempt(2, 999L))).isFalse();
         assertThat(StopStrategies.stopAfterDelay(1000L).shouldStop(failedAttempt(2, 1000L))).isTrue();
         assertThat(StopStrategies.stopAfterDelay(1000L).shouldStop(failedAttempt(2, 1001L))).isTrue();

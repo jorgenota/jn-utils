@@ -1,5 +1,7 @@
 package com.jorgenota.utils.function;
 
+import org.springframework.lang.Nullable;
+
 import java.util.function.Supplier;
 
 import static com.jorgenota.utils.function.FunctionUtils.throwAsUnchecked;
@@ -9,6 +11,7 @@ import static com.jorgenota.utils.function.FunctionUtils.throwAsUnchecked;
  */
 public interface SupplierWithExceptions<T, E extends Exception> extends Supplier<T> {
 
+    @Nullable
     default T get() {
         try {
             return getWithExceptions();
@@ -18,5 +21,6 @@ public interface SupplierWithExceptions<T, E extends Exception> extends Supplier
         return null;
     }
 
+    @Nullable
     T getWithExceptions() throws E;
 }
