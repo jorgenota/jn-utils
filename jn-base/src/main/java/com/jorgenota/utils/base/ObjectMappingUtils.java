@@ -8,16 +8,15 @@ import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 
 public final class ObjectMappingUtils {
-    public static final CharsetDecoder UTF8_DECODER = Charset.forName("UTF-8").newDecoder();
+
     public static final ObjectMapper OBJECT_MAPPER = configureObjectMapper();
 
     private ObjectMappingUtils() {
     }
 
+    @SuppressWarnings("unchecked")
     public static ObjectMapper configureObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

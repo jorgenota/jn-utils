@@ -116,12 +116,14 @@ public final class Preconditions {
      * @param text         the CharSequence to check
      * @param errorMessage the exception message to use if the check fails; will be converted to a
      *                     string using {@link String#valueOf(Object)}
+     * @return the text that was validated
      * @throws IllegalArgumentException if the text is empty
      */
-    public static void hasLength(@Nullable CharSequence text, Object errorMessage) {
+    public static <T extends CharSequence> T hasLength(@Nullable T text, Object errorMessage) {
         if (!StringUtils.hasLength(text)) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
+        return text;
     }
 
     /**
@@ -132,12 +134,14 @@ public final class Preconditions {
      * @param text         the CharSequence to check
      * @param errorMessage the exception message to use if the check fails; will be converted to a
      *                     string using {@link String#valueOf(Object)}
+     * @return the text that was validated
      * @throws IllegalArgumentException if the text is empty
      */
-    public static void hasText(@Nullable CharSequence text, Object errorMessage) {
+    public static <T extends CharSequence> T hasText(@Nullable T text, Object errorMessage) {
         if (!StringUtils.hasText(text)) {
             throw new IllegalArgumentException(String.valueOf(errorMessage));
         }
+        return text;
     }
 
     /**
@@ -147,12 +151,14 @@ public final class Preconditions {
      *
      * @param array   the array to check
      * @param message the exception message to use if the assertion fails
+     * @return the array that was validated
      * @throws IllegalArgumentException if the object array is {@code null} or contains no elements
      */
-    public static void notEmpty(@Nullable Object[] array, String message) {
+    public static Object[] notEmpty(@Nullable Object[] array, String message) {
         if (ObjectUtils.isEmpty(array)) {
             throw new IllegalArgumentException(message);
         }
+        return array;
     }
 
     /**
@@ -162,14 +168,16 @@ public final class Preconditions {
      *
      * @param object  the object to check
      * @param message the exception message to use if the assertion fails
+     * @return the object that was validated
      * @throws IllegalArgumentException if the collection is {@code null} or
      *                                  contains no elements
      * @see ObjectUtils#isEmpty(Object)
      */
-    public static void notEmpty(@Nullable Object object, String message) {
+    public static Object notEmpty(@Nullable Object object, String message) {
         if (ObjectUtils.isEmpty(object)) {
             throw new IllegalArgumentException(message);
         }
+        return object;
     }
 
     /**

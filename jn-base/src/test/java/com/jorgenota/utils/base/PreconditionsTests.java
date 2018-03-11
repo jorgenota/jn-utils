@@ -116,7 +116,10 @@ class PreconditionsTests {
 
     @Test
     void testHasLength() {
-        Preconditions.hasLength("I Heart ...", "enigma");
+        String s = "I Heart ...";
+        String result = Preconditions.hasLength("I Heart ...", "enigma");
+        assertThat(result).isSameAs(s);
+
         Preconditions.hasLength("\t  ", "enigma");
     }
 
@@ -142,7 +145,9 @@ class PreconditionsTests {
 
     @Test
     void testHasText() {
-        Preconditions.hasText("I Heart ...", "enigma");
+        String s = "I Heart ...";
+        String result = Preconditions.hasText(s, "enigma");
+        assertThat(result).isSameAs(s);
     }
 
     @Test
@@ -210,7 +215,10 @@ class PreconditionsTests {
 
     @Test
     void testNotEmptyArray() {
-        Preconditions.notEmpty(new String[]{"1234"}, "enigma");
+        String[] a = new String[]{"1234"};
+        String[] result = (String[]) Preconditions.notEmpty(a, "enigma");
+        assertThat(result).isSameAs(a);
+
         Preconditions.notEmpty(new String[]{null}, "enigma");
     }
 
@@ -237,7 +245,10 @@ class PreconditionsTests {
 
     @Test
     void testNotEmptyObject() {
-        Preconditions.notEmpty("I Heart ...", "enigma");
+        Object o = "I Heart ...";
+        Object result = Preconditions.notEmpty(o, "enigma");
+        assertThat(result).isSameAs(o);
+
         Preconditions.notEmpty(5, "enigma");
         Preconditions.notEmpty(singletonMap("foo", "bar"), "enigma");
         Preconditions.notEmpty(singletonList("foo"), "enigma");
