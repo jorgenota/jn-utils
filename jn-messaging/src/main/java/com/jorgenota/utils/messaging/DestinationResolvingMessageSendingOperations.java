@@ -53,9 +53,9 @@ public interface DestinationResolvingMessageSendingOperations<T, U extends Messa
      *
      * @param destinationName the destination name to resolve
      * @param payload         the Object to use as payload
-     * @param attributes      attributes for the message to send
+     * @param headers      headers for the message to send
      */
-    void convertAndSend(String destinationName, V payload, @Nullable U attributes)
+    void convertAndSend(String destinationName, V payload, @Nullable U headers)
             throws MessagingException;
 
     /**
@@ -81,10 +81,10 @@ public interface DestinationResolvingMessageSendingOperations<T, U extends Messa
      *
      * @param destinationName the destination name to resolve
      * @param payload         the Object to use as payload
-     * @param attributes      attributes for the message to send
+     * @param headers      headers for the message to send
      * @param postProcessor   the post processor to apply to the message
      */
-    void convertAndSend(String destinationName, V payload, @Nullable U attributes,
+    void convertAndSend(String destinationName, V payload, @Nullable U headers,
                         MessagePostProcessor<T, U> postProcessor) throws MessagingException;
 
 }

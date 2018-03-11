@@ -49,7 +49,7 @@ public class StringMessageConverter<T, U extends MessageHeaders> extends Abstrac
 
     @Override
     @SuppressWarnings("unchecked")
-    protected T convertToInternal(String payload, @Nullable U attributes) {
+    protected T convertToInternal(String payload, @Nullable U headers) {
         if (byte[].class == getSerializedPayloadClass()) {
             return (T) payload.getBytes(charset);
         }

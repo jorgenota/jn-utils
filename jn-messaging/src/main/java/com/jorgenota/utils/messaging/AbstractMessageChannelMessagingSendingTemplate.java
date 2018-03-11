@@ -35,9 +35,9 @@ public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extend
     }
 
     @Override
-    public void convertAndSend(String destinationName, V payload, @Nullable U attributes) throws MessagingException {
+    public void convertAndSend(String destinationName, V payload, @Nullable U headers) throws MessagingException {
         D channel = resolveMessageChannelByLogicalName(destinationName);
-        convertAndSend(channel, payload, attributes);
+        convertAndSend(channel, payload, headers);
     }
 
     @Override
@@ -47,9 +47,9 @@ public abstract class AbstractMessageChannelMessagingSendingTemplate<T, U extend
     }
 
     @Override
-    public void convertAndSend(String destinationName, V payload, @Nullable U attributes, MessagePostProcessor<T, U> postProcessor) throws MessagingException {
+    public void convertAndSend(String destinationName, V payload, @Nullable U headers, MessagePostProcessor<T, U> postProcessor) throws MessagingException {
         D channel = resolveMessageChannelByLogicalName(destinationName);
-        convertAndSend(channel, payload, attributes, postProcessor);
+        convertAndSend(channel, payload, headers, postProcessor);
     }
 
     protected D resolveMessageChannelByLogicalName(String destination) {

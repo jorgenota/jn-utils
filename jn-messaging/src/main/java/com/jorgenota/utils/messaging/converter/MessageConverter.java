@@ -54,11 +54,11 @@ public interface MessageConverter<T, U extends MessageHeaders, V> {
      * the conversion, it should throw {@code MessageConversionException}.
      *
      * @param payload    the Object to convert. Never  {@code null}
-     * @param attributes optional attributes for the message (may be {@code null})
+     * @param headers optional headers for the message (may be {@code null})
      * @return the new message
      * @throws MessageConversionException if the converter does not support the
      *                                    Object type or cannot perform the conversion
      */
-    Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException;
+    Message<T, U> toMessage(V payload, @Nullable U headers) throws MessageConversionException;
 
 }

@@ -75,10 +75,10 @@ public interface MessageSendingOperations<T, U extends MessageHeaders, V, D> {
      *
      * @param destination the target destination
      * @param payload     the Object to use as payload
-     * @param attributes  attributes for the message to send
+     * @param headers     headers for the message to send
      * @throws MessagingException if the message couldn't be received
      */
-    void convertAndSend(D destination, V payload, @Nullable U attributes) throws MessagingException;
+    void convertAndSend(D destination, V payload, @Nullable U headers) throws MessagingException;
 
     /**
      * Convert the given Object to serialized form, possibly using a
@@ -113,11 +113,11 @@ public interface MessageSendingOperations<T, U extends MessageHeaders, V, D> {
      *
      * @param destination   the target destination
      * @param payload       the Object to use as payload
-     * @param attributes    attributes for the message to send
+     * @param headers       headers for the message to send
      * @param postProcessor the post processor to apply to the message
      * @throws MessagingException if the message couldn't be received
      */
-    void convertAndSend(D destination, V payload, @Nullable U attributes, MessagePostProcessor<T, U> postProcessor)
+    void convertAndSend(D destination, V payload, @Nullable U headers, MessagePostProcessor<T, U> postProcessor)
             throws MessagingException;
 
 }

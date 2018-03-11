@@ -59,10 +59,10 @@ public class CompositeMessageConverter<T, U extends MessageHeaders, V> implement
 
     @Override
     @SuppressWarnings("unchecked")
-    public Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
+    public Message<T, U> toMessage(V payload, @Nullable U headers) throws MessageConversionException {
         for (MessageConverter converter : getConverters()) {
             try {
-                return converter.toMessage(payload, attributes);
+                return converter.toMessage(payload, headers);
             } catch (Exception e) {
                 // continue;
             }

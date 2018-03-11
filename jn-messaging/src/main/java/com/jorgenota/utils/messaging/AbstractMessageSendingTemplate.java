@@ -90,8 +90,8 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
     }
 
     @Override
-    public void convertAndSend(D destination, V payload, @Nullable U attributes) throws MessagingException {
-        Message<T, U> message = doConvert(payload, attributes, null);
+    public void convertAndSend(D destination, V payload, @Nullable U headers) throws MessagingException {
+        Message<T, U> message = doConvert(payload, headers, null);
         send(destination, message);
     }
 
@@ -108,10 +108,10 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
     }
 
     @Override
-    public void convertAndSend(D destination, V payload, @Nullable U attributes,
+    public void convertAndSend(D destination, V payload, @Nullable U headers,
                                MessagePostProcessor<T, U> postProcessor) throws MessagingException {
 
-        Message<T, U> message = doConvert(payload, attributes, postProcessor);
+        Message<T, U> message = doConvert(payload, headers, postProcessor);
         send(destination, message);
     }
 
@@ -121,13 +121,13 @@ public abstract class AbstractMessageSendingTemplate<T, U extends MessageHeaders
      * attributes and apply the given post processor.
      *
      * @param payload       the Object to use as payload
-     * @param attributes    attributes for the message to send
+     * @param headers    headers for the message to send
      * @param postProcessor the post processor to apply to the message
      * @return the converted message
      */
-    protected Message<T, U> doConvert(V payload, @Nullable U attributes, @Nullable MessagePostProcessor<T, U> postProcessor) {
+    protected Message<T, U> doConvert(V payload, @Nullable U headers, @Nullable MessagePostProcessor<T, U> postProcessor) {
 
-        Message<T, U> message = getMessageConverter().toMessage(payload, attributes);
+        Message<T, U> message = getMessageConverter().toMessage(payload, headers);
         if (postProcessor != null) {
             message = postProcessor.postProcessMessage(message);
         }

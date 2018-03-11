@@ -33,7 +33,7 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
 
     private final T payload;
     @Nullable
-    private final U attributes;
+    private final U headers;
 
     /**
      * Create a new message with the given payload.
@@ -45,15 +45,15 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
     }
 
     /**
-     * Create a new message with the given payload and attributes.
+     * Create a new message with the given payload and headers.
      * The content of the given header map is copied.
      *
      * @param payload    the message payload (never {@code null})
-     * @param attributes message attributes to use for initialization
+     * @param headers message headers to use for initialization
      */
-    public GenericMessage(T payload, @Nullable U attributes) {
+    public GenericMessage(T payload, @Nullable U headers) {
         this.payload = notNull(payload, "Payload must not be null");
-        this.attributes = attributes;
+        this.headers = headers;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
 
     @Override
     @Nullable
-    public U getAttributes() {
-        return this.attributes;
+    public U getHeaders() {
+        return this.headers;
     }
 
 
@@ -77,12 +77,12 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
         }
         GenericMessage<?, ?> otherMsg = (GenericMessage<?, ?>) other;
         // Using nullSafeEquals for proper array equals comparisons
-        return (ObjectUtils.nullSafeEquals(this.payload, otherMsg.payload) && ObjectUtils.nullSafeEquals(this.attributes, otherMsg.attributes));
+        return (ObjectUtils.nullSafeEquals(this.payload, otherMsg.payload) && ObjectUtils.nullSafeEquals(this.headers, otherMsg.headers));
     }
 
     public int hashCode() {
         // Using nullSafeHashCode for proper array hashCode handling
-        return (ObjectUtils.nullSafeHashCode(this.payload) * 23 + ObjectUtils.nullSafeHashCode(this.attributes));
+        return (ObjectUtils.nullSafeHashCode(this.payload) * 23 + ObjectUtils.nullSafeHashCode(this.headers));
     }
 
     public String toString() {
@@ -93,7 +93,7 @@ public class GenericMessage<T, U extends MessageHeaders> implements Message<T, U
         } else {
             sb.append(this.payload);
         }
-        sb.append(", attributes=").append(this.attributes).append("]");
+        sb.append(", headers=").append(this.headers).append("]");
         return sb.toString();
     }
 

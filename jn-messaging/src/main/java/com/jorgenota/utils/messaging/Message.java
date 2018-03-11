@@ -4,7 +4,7 @@ import org.springframework.lang.Nullable;
 
 /**
  * @param <T> the type of the serialized payload that conforms the message. Can be {@code String}  or {@code byte[]}
- * @param <U> the type of the message attributes. Must be a subclass of MessageHeaders
+ * @param <U> the type of the message headers. Must be a subclass of MessageHeaders
  * @author Jorge Alonso
  */
 public interface Message<T, U extends MessageHeaders> {
@@ -14,8 +14,8 @@ public interface Message<T, U extends MessageHeaders> {
     T getPayload();
 
     /**
-     * Return the message attributes. May be {@code null}.
+     * Return the message headers. May be {@code null}.
      */
     @Nullable
-    U getAttributes();
+    U getHeaders();
 }

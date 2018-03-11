@@ -42,9 +42,9 @@ public class SimpleMessageConverter<T, U extends MessageHeaders, V> implements M
 
     @Override
     @SuppressWarnings("unchecked")
-    public Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
+    public Message<T, U> toMessage(V payload, @Nullable U headers) throws MessageConversionException {
         try {
-            return new GenericMessage<>((T) payload, attributes);
+            return new GenericMessage<>((T) payload, headers);
         } catch (ClassCastException e) {
             throw new MessageConversionException("Error converting payload from class " + payload.getClass().getName());
         }

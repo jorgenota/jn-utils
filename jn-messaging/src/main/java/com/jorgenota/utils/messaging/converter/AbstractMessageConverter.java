@@ -71,10 +71,10 @@ public abstract class AbstractMessageConverter<T, U extends MessageHeaders, V> i
     }
 
     @Override
-    public final Message<T, U> toMessage(V payload, @Nullable U attributes) throws MessageConversionException {
+    public final Message<T, U> toMessage(V payload, @Nullable U headers) throws MessageConversionException {
         try {
-            T convertedPayload = convertToInternal(payload, attributes);
-            return new GenericMessage<T, U>(convertedPayload, attributes);
+            T convertedPayload = convertToInternal(payload, headers);
+            return new GenericMessage<T, U>(convertedPayload, headers);
         } catch (Exception e) {
             if (e instanceof MessageConversionException) throw (MessageConversionException) e;
             throw new MessageConversionException("Error converting payload to class " + payload.getClass().getName(), e);

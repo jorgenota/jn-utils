@@ -127,7 +127,7 @@ public class MappingJackson2MessageConverter<T, U extends MessageHeaders, V> ext
 
     @Override
     @SuppressWarnings("unchecked")
-    protected T convertToInternal(V payload, @Nullable U attributes) throws IOException {
+    protected T convertToInternal(V payload, @Nullable U headers) throws IOException {
         if (byte[].class == getSerializedPayloadClass()) {
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             JsonGenerator generator = this.objectMapper.getFactory().createGenerator(out, this.charset);
