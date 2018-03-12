@@ -154,7 +154,7 @@ public final class Preconditions {
      * @return the array that was validated
      * @throws IllegalArgumentException if the object array is {@code null} or contains no elements
      */
-    public static Object[] notEmpty(@Nullable Object[] array, String message) {
+    public static <T> T[] notEmpty(@Nullable T[] array, String message) {
         if (ObjectUtils.isEmpty(array)) {
             throw new IllegalArgumentException(message);
         }
@@ -173,7 +173,7 @@ public final class Preconditions {
      *                                  contains no elements
      * @see ObjectUtils#isEmpty(Object)
      */
-    public static Object notEmpty(@Nullable Object object, String message) {
+    public static <T> T notEmpty(@Nullable T object, String message) {
         if (ObjectUtils.isEmpty(object)) {
             throw new IllegalArgumentException(message);
         }
