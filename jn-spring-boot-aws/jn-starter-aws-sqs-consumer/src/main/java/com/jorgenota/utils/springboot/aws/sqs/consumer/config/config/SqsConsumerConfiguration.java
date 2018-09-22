@@ -3,8 +3,8 @@ package com.jorgenota.utils.springboot.aws.sqs.consumer.config.config;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClientBuilder;
-import com.jorgenota.utils.aws.sqs.listener.SimpleMessageListenerContainer;
 import com.jorgenota.utils.aws.sqs.listener.SqsMessageHandler;
+import com.jorgenota.utils.aws.sqs.listener.SqsMessageListenerContainer;
 import com.jorgenota.utils.base.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -49,11 +49,10 @@ public class SqsConsumerConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public SimpleMessageListenerContainer simpleMessageListenerContainer(AmazonSQSAsync amazonSqs, List<SqsMessageHandler> messageHandlers) {
+    public SqsMessageListenerContainer simpleMessageListenerContainer(AmazonSQSAsync amazonSqs, List<SqsMessageHandler> messageHandlers) {
         notNull(amazonSqs, "amazonSqs must not be null");
 
-        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
-        simpleMessageListenerContainer.setAmazonSqs(amazonSqs);
+        SqsMessageListenerContainer simpleMessageListenerContainer = new SqsMessageListenerContainer(amazonSqs, messageHandlers);
         simpleMessageListenerContainer.setAutoStartup(true);
         simpleMessageListenerContainer.setMaxNumberOfMessages(configuration.getMaxNumberOfMessages());
         simpleMessageListenerContainer.setBackOffTime(configuration.getBackOffTime());

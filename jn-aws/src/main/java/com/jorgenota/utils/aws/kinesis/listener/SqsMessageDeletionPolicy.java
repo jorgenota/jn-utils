@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jorgenota.utils.aws.sqs.listener;
+package com.jorgenota.utils.aws.kinesis.listener;
 
 import com.jorgenota.utils.aws.support.Acknowledgment;
 

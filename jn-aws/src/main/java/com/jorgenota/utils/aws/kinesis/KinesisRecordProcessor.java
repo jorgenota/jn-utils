@@ -11,6 +11,7 @@ import com.amazonaws.services.kinesis.model.Record;
 import com.jorgenota.utils.function.RunnableWithExceptions;
 import com.jorgenota.utils.retry.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

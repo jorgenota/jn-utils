@@ -2,6 +2,7 @@ package com.jorgenota.utils.aws.utils;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.util.EC2MetadataUtils;
+import org.springframework.lang.Nullable;
 
 /**
  * @author Jorge Alonso
@@ -12,6 +13,7 @@ public final class AwsUtils {
     private AwsUtils() {
     }
 
+    @Nullable
     private static Boolean isCloudEnvironment;
 
     public static boolean isRunningOnCloudEnvironment() {

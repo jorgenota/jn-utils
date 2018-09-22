@@ -4,6 +4,7 @@ import com.amazonaws.services.sqs.model.MessageAttributeValue;
 import com.jorgenota.utils.aws.sqs.listener.SqsMessageAcknowledgment;
 import com.jorgenota.utils.messaging.MessageHeaders;
 import lombok.Data;
+import org.springframework.lang.Nullable;
 
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import java.util.Map;
 @Data
 public class SqsMessageHeaders implements MessageHeaders {
 
+    @Nullable
     private String messageId;
 
     /**
@@ -21,6 +23,7 @@ public class SqsMessageHeaders implements MessageHeaders {
      * belong to the same message group are processed in a FIFO manner (however,
      * messages in different message groups might be processed out of order)
      */
+    @Nullable
     private String messageGroupId;
 
     /**
@@ -30,6 +33,7 @@ public class SqsMessageHeaders implements MessageHeaders {
      * MessageDeduplicationId are accepted successfully but aren't delivered during the
      * 5-minute deduplication interval.
      */
+    @Nullable
     private String messageDeduplicationId;
 
     /**
@@ -37,13 +41,15 @@ public class SqsMessageHeaders implements MessageHeaders {
      * Valid values: 0 to 900. Maximum: 15 minutes. Messages with a positive DelaySeconds
      * value become available for processing after the delay period is finished.
      */
+    @Nullable
     private Integer delaySeconds;
 
-    /**
-     *
-     */
+    @Nullable
+    private Map<String, MessageAttributeValue> messageAttributes;
+
+    @Nullable
     private SqsMessageAcknowledgment messageAcknowledgment;
 
+    @Nullable
     private Map<String, String> attributes;
-    private Map<String, MessageAttributeValue> messageAttributes;
 }

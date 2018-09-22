@@ -1,4 +1,4 @@
-package com.jorgenota.utils.aws.sqs.listener;
+package com.jorgenota.utils.aws.kinesis.listener;
 
 import com.jorgenota.utils.aws.sqs.SqsMessageHeaders;
 import com.jorgenota.utils.base.Preconditions;

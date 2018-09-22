@@ -63,9 +63,9 @@ public class S3ObjectStore implements ObjectStore {
     /**
      * Get object from S3 with the name storageName.
      *
-     * @param bucketName
-     * @param key
-     * @return ByteArrayDataSource
+     * @param bucketName name of the bucket containing the object to retrieve
+     * @param key key of the object to retrieve
+     * @return byte[] representing the object stored in the bucket
      */
     private byte[] getBytesInternal(String bucketName, String key) throws IOException, SdkClientException {
         try (S3Object object = s3.getObject(new GetObjectRequest(bucketName, key))) {
@@ -76,11 +76,11 @@ public class S3ObjectStore implements ObjectStore {
     /**
      * Get object from S3 with the name storageName.
      *
-     * @param bucketName
-     * @param key
-     * @return ByteArrayDataSource
+     * @param bucketName name of the bucket containing the object to retrieve
+     * @param key key of the object to retrieve
+     * @return string representing the object stored in the bucket
      */
-    private String getStringInternal(String bucketName, String key) throws IOException, SdkClientException {
+    private String getStringInternal(String bucketName, String key) throws SdkClientException {
         return s3.getObjectAsString(bucketName, key);
     }
 
@@ -135,7 +135,7 @@ public class S3ObjectStore implements ObjectStore {
     private void deleteObjectsInternal(String bucketName, Collection<String> keys) throws SdkClientException {
         DeleteObjectsRequest multiObjectDeleteRequest = new DeleteObjectsRequest(bucketName);
         multiObjectDeleteRequest.setKeys(keys.stream()
-            .map(x -> new DeleteObjectsRequest.KeyVersion(x)).collect(Collectors.toList()));
+                .map(DeleteObjectsRequest.KeyVersion::new).collect(Collectors.toList()));
 
 
         s3.deleteObjects(multiObjectDeleteRequest);
