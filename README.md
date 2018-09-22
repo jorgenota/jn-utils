@@ -29,6 +29,7 @@ In jn-base:
 * StringUtils and ObjectUtils contain minimal functionality from Spring's 
 [StringUtils](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/main/java/org/springframework/util/StringUtils.java)
 and [ObjectUtils](https://github.com/spring-projects/spring-framework/blob/master/spring-core/src/main/java/org/springframework/util/ObjectUtils.java).
+
 In jn-function:
 * The XXXWithException clases are inspired by this gist:
 [LambdaExceptionUtil.java](https://gist.github.com/jomoespe/ea5c21722b693c09c38bf6286226cd92)
