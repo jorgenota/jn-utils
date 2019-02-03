@@ -6,14 +6,6 @@ Some utility libraries to deal with objects, strings, functions and retries:
 * [jn-base](jn-base/README.md)
 * [jn-function](jn-function/README.md)
 
-Simple clients to easily use AWS services such as S3 and Kinesis:
-* [jn-aws](jn-aws/README.md)
-
-For those who are using Spring Boot, these starters ease the use of Amazon Web Services by
-providing required dependencies and autoconfiguration:
-* [jn-starter-aws-kinesis](jn-spring-boot-aws/jn-starter-aws-kinesis/README.md)
-* [jn-starter-aws-s3](jn-spring-boot-aws/jn-starter-aws-s3/README.md)
-
 A BOM is provided to manage all your dependencies on any Jn Utils library and to make
 sure Maven picks the compatible versions when depending on multiple Jn Utils libraries.
 * [jn-bom](jn-bom/README.md)

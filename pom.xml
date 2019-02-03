@@ -31,8 +31,6 @@
     <modules>
         <module>jn-base</module>
         <module>jn-function</module>
-        <module>jn-messaging</module>
-        <module>jn-aws</module>
         <module>jn-spring-boot-aws</module>
         <module>jn-bom</module>
     </modules>
