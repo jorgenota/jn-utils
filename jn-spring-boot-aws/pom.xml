@@ -13,11 +13,29 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>jn-starter-aws-kinesis-consumer</module>
-        <module>jn-starter-aws-kinesis-producer</module>
+        <module>jn-aws-autoconfigure</module>
         <module>jn-starter-aws-s3</module>
-        <module>jn-starter-aws-sqs-consumer</module>
+        <module>jn-aws-test-support</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
 </project>

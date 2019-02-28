@@ -1,3 +1,0 @@
-# Bootstrap components
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jorgenota.utils.springboot.aws.kinesis.consumer.config.KinesisConsumerConfiguration

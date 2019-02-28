@@ -26,22 +26,7 @@
             </dependency>
             <dependency>
                 <groupId>com.jorgenota.utils</groupId>
-                <artifactId>jn-messaging</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jorgenota.utils</groupId>
-                <artifactId>jn-aws</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jorgenota.utils</groupId>
                 <artifactId>jn-starter-aws-s3</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jorgenota.utils</groupId>
-                <artifactId>jn-starter-aws-kinesis</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

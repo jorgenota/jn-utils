@@ -9,17 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jn-starter-aws-s3</artifactId>
+    <artifactId>jn-aws-autoconfigure</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.jorgenota.utils</groupId>
-            <artifactId>jn-aws-autoconfigure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
+            <artifactId>aws-java-sdk-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -27,10 +22,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.jorgenota.utils</groupId>
-            <artifactId>jn-aws-test-support</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 

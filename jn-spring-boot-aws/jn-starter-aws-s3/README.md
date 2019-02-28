@@ -1,12 +1,14 @@
 # Jn Starter AWS S3
 
-Starter for Spring Boot applications that provides dependencies to use Amazon S3
-and autoconfigures an `AmazonS3` client and a `SimpleS3Client` (abstraction to simplify
-the use of S3 with retrying capabilities).
+This starter automatically configures a bean _amazonS3_ (of type `AmazonS3`) that provides S3 client ready to be used.
+
+Depends on [jn-aws-autoconfigure](../jn-aws-autoconfigure/README.md), which sets up a basic common environment via
+the bean _awsEnvironment_
+(check its documentation to get more information about the configuration properties made available by this module)
+
+The following properties are used to autoconfigure the `AwsEnvironment`
 
 | Property               | Description                                                                | Default value  |
 | ---------------------- | -------------------------------------------------------------------------- | -------------- |
-| aws.s3.region          | Region for the S3 Service. If not informed, the default region will by used |               |
-| aws.s3.endpoint  | Service endpoint either with or without the protocol. Only use this if using a non-standard service endpoint.                         |     |
-| aws.s3.retryAttempts   | Number of attempts when the `SimpleS3Client` connects to S3                          |   1 |
-| aws.s3.retrySleepTime  | Waiting time in milliseconds between attempts                              |    0 |
+| aws.s3.region | Custom region for S3 client. If not set, default region provided by _awsEnvironment_ will be used (recommended) | |
+| aws.s3.endpoint  | Service endpoint to use when building the S3 client, in case the user needs to set a specific one.  | |

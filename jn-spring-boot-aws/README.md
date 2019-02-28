@@ -1,3 +1,3 @@
 # Jn Spring Boot AWS
 
-Starters to help developing apps that deal with AWS Services.
+Provides starters to help developing Spring Boot apps that deal with AWS Services.
