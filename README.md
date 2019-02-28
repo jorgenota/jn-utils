@@ -6,6 +6,10 @@ Some utility libraries to deal with objects, strings, functions and retries:
 * [jn-base](jn-base/README.md)
 * [jn-function](jn-function/README.md)
 
+Spring Boot starters for developers using AWS services are provided under the
+[jn-spring-boot-aws](jn-spring-boot-aws/README.md) module:
+* [jn-starter-aws-s3](jn-spring-boot-aws/jn-starter-aws-s3/README.md)
+
 A BOM is provided to manage all your dependencies on any Jn Utils library and to make
 sure Maven picks the compatible versions when depending on multiple Jn Utils libraries.
 * [jn-bom](jn-bom/README.md)
