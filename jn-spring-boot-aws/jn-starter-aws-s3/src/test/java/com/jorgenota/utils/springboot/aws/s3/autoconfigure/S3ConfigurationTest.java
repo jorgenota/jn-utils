@@ -1,7 +1,8 @@
 package com.jorgenota.utils.springboot.aws.s3.autoconfigure;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.jorgenota.utils.springboot.aws.testsupport.IrelandRegionConfiguration;
+import com.jorgenota.utils.springboot.aws.testsupport.IrelandRegionAwsEnvironmentConfiguration;
+import com.jorgenota.utils.springboot.aws.testsupport.TestUtils;
 import org.assertj.core.api.AbstractObjectAssert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,9 +12,6 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.assertj.AssertableApplicationContext;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.lang.Nullable;
-
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,7 +28,7 @@ class S3ConfigurationTest {
     class TestCasesWhenContextRefreshingFails {
 
         @Test
-        void noDefaultRegionConfigured() {
+        void noAwsEnvironmentRegionConfigured() {
             contextRunner
                     .run((context) -> assertThat_creationOfAmazonS3_fails(context));
         }
@@ -48,40 +46,43 @@ class S3ConfigurationTest {
     class TestCasesWhenContextRefreshingSucceeds {
 
         @Test
-        void defaultRegionConfigured() {
+        void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionConfiguration.class)
+                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
                     .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-1", null));
         }
 
         @Test
-        void defaultRegionConfigured_customRegionConfigured() {
+        void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.s3.region=us-east-1")
-                    .withUserConfiguration(IrelandRegionConfiguration.class)
-                    .run((context) -> assertThat_amazonS3_isCreated(context, "us-east-1", null));
+                    .withPropertyValues("aws.s3.region=eu-west-2")
+                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                    .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-2", null));
         }
 
         @Test
-        void defaultRegionConfigured_customEndpointConfigured() {
+        void awsEnvironmentRegionConfigured_customEndpointConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionConfiguration.class)
-                    .withPropertyValues("aws.s3.endpoint=https://s3.us-east-1.amazonaws.com")
-                    .run((context) -> assertThat_amazonS3_isCreated(context, "us-east-1", "https://s3.us-east-1.amazonaws.com"));
+                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                    .withPropertyValues("aws.s3.endpoint=https://s3.us-west-2.amazonaws.com")
+                    .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-1", "https://s3.us-west-2.amazonaws.com"));
         }
 
-        private void assertThat_amazonS3_isCreated(AssertableApplicationContext context, String expectedRegion, @Nullable String expectedEndpoint) {
-            assertThat(context).hasSingleBean(AmazonS3.class);
-            AbstractObjectAssert<?, AmazonS3> amazonS3AbstractObjectAssert = assertThat(context).getBean("amazonS3", AmazonS3.class).hasFieldOrPropertyWithValue("regionName", expectedRegion);
-            if (expectedEndpoint != null) {
-                URI uriEndpoint;
-                try {
-                    uriEndpoint = new URI(expectedEndpoint);
-                } catch (URISyntaxException e) {
-                    throw new IllegalArgumentException("Endpoint value is an invalid URI");
-                }
-                amazonS3AbstractObjectAssert.hasFieldOrPropertyWithValue("endpoint", uriEndpoint);
+        private void assertThat_amazonS3_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
+            AbstractObjectAssert<?, AmazonS3> amazonSesAbstractObjectAssert = assertThat(context)
+                    .getBean("amazonS3", AmazonS3.class)
+                    .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
+
+            if (configuredEndpoint == null) {
+                amazonSesAbstractObjectAssert
+                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://s3." + configuredRegion + ".amazonaws.com"))
+                        .hasFieldOrPropertyWithValue("signerRegionOverride", null);
+            } else {
+                amazonSesAbstractObjectAssert
+                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
+
     }
 }

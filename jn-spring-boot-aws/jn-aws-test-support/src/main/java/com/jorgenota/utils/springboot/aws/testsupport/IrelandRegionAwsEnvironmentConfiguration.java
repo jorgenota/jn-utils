@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Jorge Alonso
  */
 @Configuration
-public class IrelandRegionConfiguration {
+public class IrelandRegionAwsEnvironmentConfiguration {
     @Bean
     AwsEnvironment awsEnvironment() {
         AwsConfigurationProperties config = new AwsConfigurationProperties();
