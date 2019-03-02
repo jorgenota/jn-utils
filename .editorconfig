@@ -11,6 +11,6 @@ continuation_indent_size = 8
 end_of_line = lf
 charset = utf-8
 
-[*.{json,yaml,yml}]
+[*.{json, yaml, yml}]
 indent_style = space
 indent_size = 2

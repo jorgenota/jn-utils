@@ -116,7 +116,7 @@ public final class WaitStrategies {
 
         private FixedWaitStrategy(long sleepTime) {
             Preconditions.isTrue(sleepTime >= 0L,
-                "sleepTime must be >= 0 but is %d", sleepTime);
+                    "sleepTime must be >= 0 but is %d", sleepTime);
             this.sleepTime = sleepTime;
         }
 
@@ -133,9 +133,9 @@ public final class WaitStrategies {
 
         private RandomWaitStrategy(long minimum, long maximum) {
             Preconditions.isTrue(minimum >= 0,
-                "minimum must be >= 0 but is %d", minimum);
+                    "minimum must be >= 0 but is %d", minimum);
             Preconditions.isTrue(maximum > minimum,
-                "maximum must be > minimum but maximum is %d and minimum is", maximum, minimum);
+                    "maximum must be > minimum but maximum is %d and minimum is", maximum, minimum);
 
             this.minimum = minimum;
             this.maximum = maximum;
@@ -155,7 +155,7 @@ public final class WaitStrategies {
         private IncrementingWaitStrategy(long initialSleepTime,
                                          long increment) {
             Preconditions.isTrue(initialSleepTime >= 0L,
-                "initialSleepTime must be >= 0 but is %d", initialSleepTime);
+                    "initialSleepTime must be >= 0 but is %d", initialSleepTime);
             this.initialSleepTime = initialSleepTime;
             this.increment = increment;
         }
@@ -174,11 +174,11 @@ public final class WaitStrategies {
         private ExponentialWaitStrategy(long multiplier,
                                         long maximumWait) {
             Preconditions.isTrue(multiplier > 0L,
-                "multiplier must be > 0 but is %d", multiplier);
+                    "multiplier must be > 0 but is %d", multiplier);
             Preconditions.isTrue(maximumWait >= 0L,
-                "maximumWait must be >= 0 but is %d", maximumWait);
+                    "maximumWait must be >= 0 but is %d", maximumWait);
             Preconditions.isTrue(multiplier < maximumWait,
-                "multiplier must be < maximumWait but is %d", multiplier);
+                    "multiplier must be < maximumWait but is %d", multiplier);
             this.multiplier = multiplier;
             this.maximumWait = maximumWait;
         }
