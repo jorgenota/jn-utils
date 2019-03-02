@@ -26,7 +26,27 @@
             </dependency>
             <dependency>
                 <groupId>com.jorgenota.utils</groupId>
+                <artifactId>jn-starter-aws-kinesis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jorgenota.utils</groupId>
                 <artifactId>jn-starter-aws-s3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jorgenota.utils</groupId>
+                <artifactId>jn-starter-aws-ses</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jorgenota.utils</groupId>
+                <artifactId>jn-starter-aws-sns</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jorgenota.utils</groupId>
+                <artifactId>jn-starter-aws-sqs</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
