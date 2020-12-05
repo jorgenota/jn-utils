@@ -1,4 +1,4 @@
-package com.jorgenota.utils.springboot.aws.sqs.autoconfigure;
+package com.jorgenota.utils.springboot.aws.ses.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

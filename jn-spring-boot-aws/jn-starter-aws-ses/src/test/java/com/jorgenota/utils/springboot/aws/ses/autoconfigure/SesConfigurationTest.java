@@ -1,7 +1,6 @@
 package com.jorgenota.utils.springboot.aws.ses.autoconfigure;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync;
-import com.jorgenota.utils.springboot.aws.sqs.autoconfigure.SesConfiguration;
 import com.jorgenota.utils.springboot.aws.testsupport.IrelandRegionAwsEnvironmentConfiguration;
 import com.jorgenota.utils.springboot.aws.testsupport.TestUtils;
 import org.assertj.core.api.AbstractObjectAssert;

@@ -1,4 +1,4 @@
-package com.jorgenota.utils.springboot.aws.sqs.autoconfigure;
+package com.jorgenota.utils.springboot.aws.ses.autoconfigure;
 
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsync;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceAsyncClientBuilder;
