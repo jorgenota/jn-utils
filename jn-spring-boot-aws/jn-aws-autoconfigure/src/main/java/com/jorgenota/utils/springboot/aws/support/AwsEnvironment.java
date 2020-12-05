@@ -10,6 +10,7 @@ import com.amazonaws.util.EC2MetadataUtils;
 import com.jorgenota.utils.springboot.aws.autoconfigure.AwsConfigurationProperties;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
@@ -26,7 +27,7 @@ public class AwsEnvironment {
     }
 
     private void initRegion(boolean autoDetect, @Nullable String region) {
-        if (!StringUtils.isEmpty(region)) {
+        if (StringUtils.hasLength(region)) {
             this.defaultRegion = region;
         } else if (autoDetect) {
             try {
@@ -45,7 +46,7 @@ public class AwsEnvironment {
     }
 
     private void initCredentialsProvider(boolean useDefaultCredentialsChain, @Nullable String accessKey, @Nullable String secretKey) {
-        if (!StringUtils.isEmpty(accessKey) && !StringUtils.isEmpty(secretKey)) {
+        if (StringUtils.hasLength(accessKey) && StringUtils.hasLength(secretKey)) {
             this.defaultCredentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
         } else if (useDefaultCredentialsChain) {
             this.defaultCredentialsProvider = new DefaultAWSCredentialsProviderChain();
@@ -63,14 +64,14 @@ public class AwsEnvironment {
     }
 
     public void configureAwsClientBuilder(AwsClientBuilder builder, @Nullable String customRegion, @Nullable String serviceEndpoint, @Nullable AWSCredentialsProvider customCredentialsProvider) {
-        String region = StringUtils.isEmpty(customRegion) ? this.defaultRegion : customRegion;
-        if (StringUtils.isEmpty(serviceEndpoint)) {
-            builder.setRegion(region);
-        } else {
+        String region = StringUtils.hasLength(customRegion) ? customRegion : this.defaultRegion;
+        if (StringUtils.hasLength(serviceEndpoint)) {
             builder.setEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, region));
+        } else {
+            builder.setRegion(region);
         }
 
-        AWSCredentialsProvider credentialsProvider = StringUtils.isEmpty(customCredentialsProvider) ? this.defaultCredentialsProvider : customCredentialsProvider;
+        AWSCredentialsProvider credentialsProvider = ObjectUtils.isEmpty(customCredentialsProvider) ? this.defaultCredentialsProvider : customCredentialsProvider;
         builder.setCredentials(credentialsProvider);
     }
 }
