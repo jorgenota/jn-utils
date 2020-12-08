@@ -10,7 +10,6 @@ The following properties are used to autoconfigure the `AwsEnvironment`
 
 | Property               | Description                                                                | Default value  |
 | ---------------------- | -------------------------------------------------------------------------- | -------------- |
-| aws.s3.region | Custom region for the S3 client. If not set, default region provided by _
-awsEnvironment_ will be used (recommended) | |
+| aws.s3.region | Custom region for the S3 client. If not set, default region provided by `awsEnvironment` will be used (recommended) | |
 | aws.s3.endpoint  | Service endpoint to use when building the S3 client, in case the user needs to set a specific one.  | |
 | aws.s3.config.&lt;property&gt;  |  All the additional properties to configure the AWS client if you need to modify its default values. Read [documentarion of AWSClientProperties.Config](../jn-aws-autoconfigure/README.md#awsclientproperties-doc)  | |
