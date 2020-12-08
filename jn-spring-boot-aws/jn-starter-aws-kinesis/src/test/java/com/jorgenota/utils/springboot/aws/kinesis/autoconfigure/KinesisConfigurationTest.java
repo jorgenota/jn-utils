@@ -63,20 +63,30 @@ class KinesisConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured_customEndpointConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .withPropertyValues("aws.kinesis.endpoint=https://kinesis.us-west-2.amazonaws.com")
-                    .run((context) -> assertThat_AmazonKinesis_isCreated(context, "eu-west-1", "https://kinesis.us-west-2.amazonaws.com"));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.kinesis.endpoint=https://kinesis.us-west-2.amazonaws.com")
+                .run((context) -> assertThat_AmazonKinesis_isCreated(context, "eu-west-1", "https://kinesis.us-west-2.amazonaws.com"));
+        }
+
+        @Test
+        void awsEnvironmentRegionConfigured_customMaxConnectionsConfigured() {
+            contextRunner
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.kinesis.config.maxConnections=11")
+                .run((context) -> assertThat(context)
+                    .getBean("amazonKinesis", AmazonKinesisAsync.class)
+                    .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11));
         }
 
         private void assertThat_AmazonKinesis_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
             AbstractObjectAssert<?, AmazonKinesisAsync> amazonSesAbstractObjectAssert = assertThat(context)
-                    .getBean("amazonKinesis", AmazonKinesisAsync.class)
-                    .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
+                .getBean("amazonKinesis", AmazonKinesisAsync.class)
+                .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
 
             if (configuredEndpoint == null) {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://kinesis." + configuredRegion + ".amazonaws.com"))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", null);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://kinesis." + configuredRegion + ".amazonaws.com"))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
                         .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))

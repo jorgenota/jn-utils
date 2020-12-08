@@ -19,7 +19,7 @@ public class SesConfiguration {
     @ConditionalOnMissingBean
     public AmazonSimpleEmailServiceAsync amazonSes(SesConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonSimpleEmailServiceAsyncClientBuilder builder = AmazonSimpleEmailServiceAsyncClientBuilder.standard();
-        awsEnvironment.configureAwsClientBuilder(builder, config.getRegion(), config.getEndpoint(), null);
+        awsEnvironment.configureAwsClientBuilder(builder, config, null);
         return builder.build();
     }
 }

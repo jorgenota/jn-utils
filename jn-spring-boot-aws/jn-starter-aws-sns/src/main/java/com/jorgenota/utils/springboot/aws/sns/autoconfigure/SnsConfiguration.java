@@ -19,7 +19,7 @@ public class SnsConfiguration {
     @ConditionalOnMissingBean
     public AmazonSNSAsync amazonSns(SnsConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonSNSAsyncClientBuilder builder = AmazonSNSAsyncClientBuilder.standard();
-        awsEnvironment.configureAwsClientBuilder(builder, config.getRegion(), config.getEndpoint(), null);
+        awsEnvironment.configureAwsClientBuilder(builder, config, null);
         return builder.build();
     }
 }

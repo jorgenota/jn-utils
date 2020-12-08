@@ -63,20 +63,30 @@ class SnsConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured_customEndpointConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .withPropertyValues("aws.sns.endpoint=https://sns.us-west-2.amazonaws.com")
-                    .run((context) -> assertThat_amazonSns_isCreated(context, "eu-west-1", "https://sns.us-west-2.amazonaws.com"));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.sns.endpoint=https://sns.us-west-2.amazonaws.com")
+                .run((context) -> assertThat_amazonSns_isCreated(context, "eu-west-1", "https://sns.us-west-2.amazonaws.com"));
+        }
+
+        @Test
+        void awsEnvironmentRegionConfigured_customMaxConnectionsConfigured() {
+            contextRunner
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.sns.config.maxConnections=11")
+                .run((context) -> assertThat(context)
+                    .getBean("amazonSns", AmazonSNSAsync.class)
+                    .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11));
         }
 
         private void assertThat_amazonSns_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
             AbstractObjectAssert<?, AmazonSNSAsync> amazonSesAbstractObjectAssert = assertThat(context)
-                    .getBean("amazonSns", AmazonSNSAsync.class)
-                    .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
+                .getBean("amazonSns", AmazonSNSAsync.class)
+                .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
 
             if (configuredEndpoint == null) {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://sns." + configuredRegion + ".amazonaws.com"))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", null);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://sns." + configuredRegion + ".amazonaws.com"))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
                         .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))

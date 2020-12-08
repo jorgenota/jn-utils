@@ -1,6 +1,7 @@
 package com.jorgenota.utils.springboot.aws.support;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -63,14 +64,63 @@ public class AwsEnvironment {
         return defaultCredentialsProvider;
     }
 
-    public void configureAwsClientBuilder(AwsClientBuilder builder, @Nullable String customRegion, @Nullable String serviceEndpoint, @Nullable AWSCredentialsProvider customCredentialsProvider) {
-        String region = StringUtils.hasLength(customRegion) ? customRegion : this.defaultRegion;
-        if (StringUtils.hasLength(serviceEndpoint)) {
-            builder.setEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, region));
+    public void configureAwsClientBuilder(AwsClientBuilder builder, @Nullable AWSClientProperties clientProperties, @Nullable AWSCredentialsProvider customCredentialsProvider) {
+
+        if (clientProperties == null) {
+            builder.setRegion(this.defaultRegion);
         } else {
-            builder.setRegion(region);
+            String region = StringUtils.hasLength(clientProperties.getRegion()) ? clientProperties.getRegion() : this.defaultRegion;
+            if (StringUtils.hasLength(clientProperties.getEndpoint())) {
+                builder.setEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(clientProperties.getEndpoint(), region));
+            } else {
+                builder.setRegion(region);
+            }
+
+            if (clientProperties.getConfig() != null) {
+                AWSClientProperties.Config config = clientProperties.getConfig();
+                ClientConfiguration clientConfig = new ClientConfiguration();
+
+                if (config.getCacheResponseMetadata() != null)
+                    clientConfig.setCacheResponseMetadata(config.getCacheResponseMetadata());
+                if (config.getClientExecutionTimeout() != null)
+                    clientConfig.setClientExecutionTimeout(config.getClientExecutionTimeout());
+                if (config.getConnectionMaxIdleMillis() != null)
+                    clientConfig.setConnectionMaxIdleMillis(config.getConnectionMaxIdleMillis());
+                if (config.getConnectionTimeout() != null)
+                    clientConfig.setConnectionTimeout(config.getConnectionTimeout());
+                if (config.getConnectionTTL() != null) clientConfig.setConnectionTTL(config.getConnectionTTL());
+                if (config.getDisableSocketProxy() != null)
+                    clientConfig.setDisableSocketProxy(config.getDisableSocketProxy());
+                if (config.getMaxConnections() != null) clientConfig.setMaxConnections(config.getMaxConnections());
+                if (config.getMaxConsecutiveRetriesBeforeThrottling() != null)
+                    clientConfig.setMaxConsecutiveRetriesBeforeThrottling(config.getMaxConsecutiveRetriesBeforeThrottling());
+                if (config.getMaxErrorRetry() != null) clientConfig.setMaxErrorRetry(config.getMaxErrorRetry());
+                if (config.getNonProxyHosts() != null) clientConfig.setNonProxyHosts(config.getNonProxyHosts());
+                if (config.getPreemptiveBasicProxyAuth() != null)
+                    clientConfig.setPreemptiveBasicProxyAuth(config.getPreemptiveBasicProxyAuth());
+                if (config.getProtocol() != null) clientConfig.setProtocol(config.getProtocol());
+                if (config.getProxyAuthenticationMethods() != null)
+                    clientConfig.setProxyAuthenticationMethods(config.getProxyAuthenticationMethods());
+                if (config.getProxyDomain() != null) clientConfig.setProxyDomain(config.getProxyDomain());
+                if (config.getProxyHost() != null) clientConfig.setProxyHost(config.getProxyHost());
+                if (config.getProxyPassword() != null) clientConfig.setProxyPassword(config.getProxyPassword());
+                if (config.getProxyPort() != null) clientConfig.setProxyPort(config.getProxyPort());
+                if (config.getProxyProtocol() != null) clientConfig.setProxyProtocol(config.getProxyProtocol());
+                if (config.getProxyUsername() != null) clientConfig.setProxyUsername(config.getProxyUsername());
+                if (config.getRequestTimeout() != null) clientConfig.setRequestTimeout(config.getRequestTimeout());
+                if (config.getResponseMetadataCacheSize() != null)
+                    clientConfig.setResponseMetadataCacheSize(config.getResponseMetadataCacheSize());
+                if (config.getSignerOverride() != null) clientConfig.setSignerOverride(config.getSignerOverride());
+                if (config.getUseGzip() != null) clientConfig.setUseGzip(config.getUseGzip());
+                if (config.getUseThrottleRetries() != null)
+                    clientConfig.setUseThrottleRetries(config.getUseThrottleRetries());
+
+                builder.setClientConfiguration(clientConfig);
+            }
+
         }
 
+        // Configure AWSCredentialsProvider
         AWSCredentialsProvider credentialsProvider = ObjectUtils.isEmpty(customCredentialsProvider) ? this.defaultCredentialsProvider : customCredentialsProvider;
         builder.setCredentials(credentialsProvider);
     }

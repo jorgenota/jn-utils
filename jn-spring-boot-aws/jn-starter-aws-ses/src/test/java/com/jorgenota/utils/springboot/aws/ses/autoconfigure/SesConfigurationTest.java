@@ -63,20 +63,30 @@ class SesConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured_customEndpointConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .withPropertyValues("aws.ses.endpoint=email-smtp.us-west-2.amazonaws.com")
-                    .run((context) -> assertThat_amazonSes_isCreated(context, "eu-west-1", "https://email-smtp.us-west-2.amazonaws.com"));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.ses.endpoint=email-smtp.us-west-2.amazonaws.com")
+                .run((context) -> assertThat_amazonSes_isCreated(context, "eu-west-1", "https://email-smtp.us-west-2.amazonaws.com"));
+        }
+
+        @Test
+        void awsEnvironmentRegionConfigured_customMaxConnectionsConfigured() {
+            contextRunner
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.ses.config.maxConnections=11")
+                .run((context) -> assertThat(context)
+                    .getBean("amazonSes", AmazonSimpleEmailServiceAsync.class)
+                    .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11));
         }
 
         private void assertThat_amazonSes_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
             AbstractObjectAssert<?, AmazonSimpleEmailServiceAsync> amazonSesAbstractObjectAssert = assertThat(context)
-                    .getBean("amazonSes", AmazonSimpleEmailServiceAsync.class)
-                    .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
+                .getBean("amazonSes", AmazonSimpleEmailServiceAsync.class)
+                .hasFieldOrPropertyWithValue("signingRegion", configuredRegion);
 
             if (configuredEndpoint == null) {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://email." + configuredRegion + ".amazonaws.com"))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", null);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI("https://email." + configuredRegion + ".amazonaws.com"))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
                         .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))

@@ -19,7 +19,7 @@ public class SqsConfiguration {
     @ConditionalOnMissingBean
     public AmazonSQSAsync amazonSqs(SqsConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonSQSAsyncClientBuilder builder = AmazonSQSAsyncClientBuilder.standard();
-        awsEnvironment.configureAwsClientBuilder(builder, config.getRegion(), config.getEndpoint(), null);
+        awsEnvironment.configureAwsClientBuilder(builder, config, null);
         return builder.build();
     }
 }

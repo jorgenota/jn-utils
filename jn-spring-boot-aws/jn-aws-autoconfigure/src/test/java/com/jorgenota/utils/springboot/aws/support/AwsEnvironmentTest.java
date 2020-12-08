@@ -1,11 +1,16 @@
 package com.jorgenota.utils.springboot.aws.support;
 
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
+import com.amazonaws.ProxyAuthenticationMethod;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.jorgenota.utils.springboot.aws.autoconfigure.AwsConfigurationProperties;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -135,15 +140,19 @@ class AwsEnvironmentTest {
 
         @Test
         void testNoCustomValues() {
-            awsEnvironment.configureAwsClientBuilder(builder, null, null, null);
+            awsEnvironment.configureAwsClientBuilder(builder, null, null);
             assertThat(builder.getRegion()).isEqualTo("eu-west-1");
             assertThat(builder.getEndpoint()).isNull();
             assertThat(builder.getCredentials()).isInstanceOf(DefaultAWSCredentialsProviderChain.class);
+            assertThat(builder.getClientConfiguration()).isNull();
         }
 
         @Test
         void testCustomRegion() {
-            awsEnvironment.configureAwsClientBuilder(builder, "us-east-1", null, null);
+            AWSClientProperties clientProperties = new AWSClientProperties();
+            clientProperties.setRegion("us-east-1");
+
+            awsEnvironment.configureAwsClientBuilder(builder, clientProperties, null);
             assertThat(builder.getRegion()).isEqualTo("us-east-1");
             assertThat(builder.getEndpoint()).isNull();
             assertThat(builder.getCredentials()).isInstanceOf(DefaultAWSCredentialsProviderChain.class);
@@ -151,7 +160,10 @@ class AwsEnvironmentTest {
 
         @Test
         void testCustomEndpoint() {
-            awsEnvironment.configureAwsClientBuilder(builder, null, "https://s3.us-east-1.amazonaws.com", null);
+            AWSClientProperties clientProperties = new AWSClientProperties();
+            clientProperties.setEndpoint("https://s3.us-east-1.amazonaws.com");
+
+            awsEnvironment.configureAwsClientBuilder(builder, clientProperties, null);
             assertThat(builder.getRegion()).isNull();
             assertThat(builder.getEndpoint().getServiceEndpoint()).isEqualTo("https://s3.us-east-1.amazonaws.com");
             assertThat(builder.getEndpoint().getSigningRegion()).isEqualTo("eu-west-1");
@@ -160,7 +172,11 @@ class AwsEnvironmentTest {
 
         @Test
         void testCustomRegionAndEndpoint() {
-            awsEnvironment.configureAwsClientBuilder(builder, "eu-west-2", "https://s3.us-east-1.amazonaws.com", null);
+            AWSClientProperties clientProperties = new AWSClientProperties();
+            clientProperties.setRegion("eu-west-2");
+            clientProperties.setEndpoint("https://s3.us-east-1.amazonaws.com");
+
+            awsEnvironment.configureAwsClientBuilder(builder, clientProperties, null);
             assertThat(builder.getRegion()).isNull();
             assertThat(builder.getEndpoint().getServiceEndpoint()).isEqualTo("https://s3.us-east-1.amazonaws.com");
             assertThat(builder.getEndpoint().getSigningRegion()).isEqualTo("eu-west-2");
@@ -168,9 +184,10 @@ class AwsEnvironmentTest {
         }
 
         @Test
-        void test3() {
+        void testCustomCredentialsProvider() {
             AWSStaticCredentialsProvider customCredentialsProvider = new AWSStaticCredentialsProvider(new BasicAWSCredentials("test", "testSecret"));
-            awsEnvironment.configureAwsClientBuilder(builder, null, null, customCredentialsProvider);
+
+            awsEnvironment.configureAwsClientBuilder(builder, null, customCredentialsProvider);
             assertThat(builder.getRegion()).isEqualTo("eu-west-1");
             assertThat(builder.getEndpoint()).isNull();
             assertThat(builder.getCredentials()).isInstanceOf(AWSStaticCredentialsProvider.class);
@@ -178,5 +195,77 @@ class AwsEnvironmentTest {
             assertThat(builder.getCredentials().getCredentials().getAWSSecretKey()).isEqualTo("testSecret");
         }
 
+        @Test
+        void testEmptyClientConfig() {
+            AWSClientProperties clientProperties = new AWSClientProperties();
+            clientProperties.setConfig(new AWSClientProperties.Config());
+
+            awsEnvironment.configureAwsClientBuilder(builder, clientProperties, null);
+            assertThat(builder.getClientConfiguration()).usingRecursiveComparison().isEqualTo(new ClientConfiguration());
+        }
+
+
+        @Test
+        void testCustomClientConfig() {
+            AWSClientProperties.Config config = new AWSClientProperties.Config();
+            config.setCacheResponseMetadata(false);
+            config.setClientExecutionTimeout(111);
+            config.setConnectionMaxIdleMillis(222L);
+            config.setConnectionTimeout(333);
+            config.setConnectionTTL(444L);
+            config.setDisableSocketProxy(true);
+            config.setMaxConnections(7);
+            config.setMaxConsecutiveRetriesBeforeThrottling(9);
+            config.setMaxErrorRetry(2);
+            config.setNonProxyHosts("www.google.com");
+            config.setPreemptiveBasicProxyAuth(true);
+            config.setProtocol(Protocol.HTTPS);
+            config.setProxyAuthenticationMethods(List.of(ProxyAuthenticationMethod.BASIC));
+            config.setProxyDomain("domain.com");
+            config.setProxyHost("host");
+            config.setProxyPassword("pass");
+            config.setProxyPort(25);
+            config.setProxyProtocol(Protocol.HTTP);
+            config.setProxyUsername("user");
+            config.setRequestTimeout(999);
+            config.setResponseMetadataCacheSize(888);
+            config.setSignerOverride("S3SignerType");
+            config.setUseGzip(true);
+            config.setUseThrottleRetries(false);
+
+            AWSClientProperties clientProperties = new AWSClientProperties();
+            clientProperties.setConfig(config);
+
+            awsEnvironment.configureAwsClientBuilder(builder, clientProperties, null);
+
+            ClientConfiguration expectedConfig = new ClientConfiguration();
+            expectedConfig.setMaxConnections(11);
+            expectedConfig.setCacheResponseMetadata(false);
+            expectedConfig.setClientExecutionTimeout(111);
+            expectedConfig.setConnectionMaxIdleMillis(222L);
+            expectedConfig.setConnectionTimeout(333);
+            expectedConfig.setConnectionTTL(444L);
+            expectedConfig.setDisableSocketProxy(true);
+            expectedConfig.setMaxConnections(7);
+            expectedConfig.setMaxConsecutiveRetriesBeforeThrottling(9);
+            expectedConfig.setMaxErrorRetry(2);
+            expectedConfig.setNonProxyHosts("www.google.com");
+            expectedConfig.setPreemptiveBasicProxyAuth(true);
+            expectedConfig.setProtocol(Protocol.HTTPS);
+            expectedConfig.setProxyAuthenticationMethods(List.of(ProxyAuthenticationMethod.BASIC));
+            expectedConfig.setProxyDomain("domain.com");
+            expectedConfig.setProxyHost("host");
+            expectedConfig.setProxyPassword("pass");
+            expectedConfig.setProxyPort(25);
+            expectedConfig.setProxyProtocol(Protocol.HTTP);
+            expectedConfig.setProxyUsername("user");
+            expectedConfig.setRequestTimeout(999);
+            expectedConfig.setResponseMetadataCacheSize(888);
+            expectedConfig.setSignerOverride("S3SignerType");
+            expectedConfig.setUseGzip(true);
+            expectedConfig.setUseThrottleRetries(false);
+
+            assertThat(builder.getClientConfiguration()).usingRecursiveComparison().isEqualTo(expectedConfig);
+        }
     }
 }

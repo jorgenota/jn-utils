@@ -19,7 +19,7 @@ public class S3Configuration {
     @ConditionalOnMissingBean
     public AmazonS3 amazonS3(S3ConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
-        awsEnvironment.configureAwsClientBuilder(builder, config.getRegion(), config.getEndpoint(), null);
+        awsEnvironment.configureAwsClientBuilder(builder, config, null);
         return builder.build();
     }
 }

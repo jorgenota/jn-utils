@@ -19,7 +19,7 @@ public class KinesisConfiguration {
     @ConditionalOnMissingBean
     public AmazonKinesisAsync amazonKinesis(KinesisConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonKinesisAsyncClientBuilder builder = AmazonKinesisAsyncClientBuilder.standard();
-        awsEnvironment.configureAwsClientBuilder(builder, config.getRegion(), config.getEndpoint(), null);
+        awsEnvironment.configureAwsClientBuilder(builder, config, null);
         return builder.build();
     }
 }
