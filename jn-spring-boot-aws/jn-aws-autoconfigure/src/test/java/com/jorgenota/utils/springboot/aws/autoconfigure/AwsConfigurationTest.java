@@ -48,7 +48,7 @@ class AwsConfigurationTest {
 
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(AwsConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(AwsConfiguration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -57,8 +57,8 @@ class AwsConfigurationTest {
         @Test
         void noRegionConfigured_autoDetectIsFalse() {
             contextRunner
-                    .withPropertyValues("aws.context.autoDetectRegion=false")
-                    .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
+                .withPropertyValues("aws.context.autoDetectRegion=false")
+                .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
         }
 
         @Test
@@ -66,7 +66,7 @@ class AwsConfigurationTest {
             // autodetect is true by default
 
             contextRunner
-                    .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
+                .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
         }
 
         @Test
@@ -74,15 +74,15 @@ class AwsConfigurationTest {
             // autodetect is true by default
 
             contextRunner
-                    .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.useDefaultCredentialsChain=false")
-                    .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
+                .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.useDefaultCredentialsChain=false")
+                .run((context) -> assertThat_creationOfAwsEnvironment_fails(context));
         }
 
         private void assertThat_creationOfAwsEnvironment_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'awsEnvironment'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'awsEnvironment'");
         }
     }
 
@@ -93,30 +93,30 @@ class AwsConfigurationTest {
         @Test
         void regionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.context.staticRegion=eu-west-1")
-                    .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", DefaultAWSCredentialsProviderChain.class));
+                .withPropertyValues("aws.context.staticRegion=eu-west-1")
+                .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", DefaultAWSCredentialsProviderChain.class));
         }
 
 
         @Test
         void regionConfigured_useDefaultCredentialsChainConfigured() {
             contextRunner
-                    .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.useDefaultCredentialsChain=true")
-                    .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", DefaultAWSCredentialsProviderChain.class));
+                .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.useDefaultCredentialsChain=true")
+                .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", DefaultAWSCredentialsProviderChain.class));
         }
 
         @Test
         void regionConfigured_accessKeyAndSecretKeyConfigured() {
             contextRunner
-                    .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.accessKey=test", "aws.context.secretKey=testSecret")
-                    .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", AWSStaticCredentialsProvider.class));
+                .withPropertyValues("aws.context.staticRegion=eu-west-1", "aws.context.accessKey=test", "aws.context.secretKey=testSecret")
+                .run((context) -> assertThat_awsEnvironment_isCreated(context, "eu-west-1", AWSStaticCredentialsProvider.class));
         }
 
         private void assertThat_awsEnvironment_isCreated(AssertableApplicationContext context, String region, Class<? extends AWSCredentialsProvider> credentialsProviderClass) {
             assertThat(context).hasSingleBean(AwsEnvironment.class);
             assertThat(context).getBean("awsEnvironment", AwsEnvironment.class)
-                    .hasFieldOrPropertyWithValue("defaultRegion", region)
-                    .matches(env -> env.getDefaultCredentialsProvider().getClass().equals(credentialsProviderClass));
+                .hasFieldOrPropertyWithValue("defaultRegion", region)
+                .matches(env -> env.getDefaultCredentialsProvider().getClass().equals(credentialsProviderClass));
         }
     }
 

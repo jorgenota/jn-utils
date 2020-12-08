@@ -46,9 +46,9 @@ public final class Preconditions {
      * @throws IllegalArgumentException if {@code expression} is false
      */
     public static void isTrue(
-            boolean expression,
-            String errorMessageTemplate,
-            Object... errorMessageArgs) {
+        boolean expression,
+        String errorMessageTemplate,
+        Object... errorMessageArgs) {
         if (!expression) {
             throw new IllegalArgumentException(String.format(errorMessageTemplate, errorMessageArgs));
         }
@@ -84,9 +84,9 @@ public final class Preconditions {
      * @throws IllegalStateException if {@code expression} is false
      */
     public static void state(
-            boolean expression,
-            String errorMessageTemplate,
-            Object... errorMessageArgs) {
+        boolean expression,
+        String errorMessageTemplate,
+        Object... errorMessageArgs) {
         if (!expression) {
             throw new IllegalStateException(String.format(errorMessageTemplate, errorMessageArgs));
         }

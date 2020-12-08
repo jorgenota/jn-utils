@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SqsConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(SqsConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(SqsConfiguration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -30,14 +30,14 @@ class SqsConfigurationTest {
         @Test
         void noAwsEnvironmentRegionConfigured() {
             contextRunner
-                    .run((context) -> assertThat_creationOfAmazonSqs_fails(context));
+                .run((context) -> assertThat_creationOfAmazonSqs_fails(context));
         }
 
         private void assertThat_creationOfAmazonSqs_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'amazonSqs'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'amazonSqs'");
         }
     }
 
@@ -48,16 +48,16 @@ class SqsConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSqs_isCreated(context, "eu-west-1", null));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSqs_isCreated(context, "eu-west-1", null));
         }
 
         @Test
         void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.sqs.region=us-east-1")
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSqs_isCreated(context, "us-east-1", null));
+                .withPropertyValues("aws.sqs.region=us-east-1")
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSqs_isCreated(context, "us-east-1", null));
         }
 
         @Test
@@ -89,8 +89,8 @@ class SqsConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
     }

@@ -71,8 +71,8 @@ class AwsEnvironmentTest {
 
         private void assertThat_exceptionIsThrown_whenInstantiating_AwsEnvironment(AwsConfigurationProperties configuration, String message) {
             assertThatExceptionOfType(IllegalArgumentException.class)
-                    .isThrownBy(() -> new AwsEnvironment(configuration))
-                    .withMessageContaining(message);
+                .isThrownBy(() -> new AwsEnvironment(configuration))
+                .withMessageContaining(message);
         }
     }
 

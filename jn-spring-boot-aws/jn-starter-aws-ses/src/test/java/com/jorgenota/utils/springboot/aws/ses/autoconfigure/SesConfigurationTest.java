@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SesConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(SesConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(SesConfiguration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -30,14 +30,14 @@ class SesConfigurationTest {
         @Test
         void noAwsEnvironmentRegionConfigured() {
             contextRunner
-                    .run((context) -> assertThat_creationOfAmazonSes_fails(context));
+                .run((context) -> assertThat_creationOfAmazonSes_fails(context));
         }
 
         private void assertThat_creationOfAmazonSes_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'amazonSes'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'amazonSes'");
         }
     }
 
@@ -48,16 +48,16 @@ class SesConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSes_isCreated(context, "eu-west-1", null));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSes_isCreated(context, "eu-west-1", null));
         }
 
         @Test
         void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.ses.region=us-east-1")
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSes_isCreated(context, "us-east-1", null));
+                .withPropertyValues("aws.ses.region=us-east-1")
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSes_isCreated(context, "us-east-1", null));
         }
 
         @Test
@@ -89,8 +89,8 @@ class SesConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
     }

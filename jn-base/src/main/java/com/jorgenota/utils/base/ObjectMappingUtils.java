@@ -28,7 +28,7 @@ public final class ObjectMappingUtils {
         if (ClassUtils.isPresent("java.util.Optional", classLoader)) {
             try {
                 Class<? extends Module> jdk8Module = (Class<? extends Module>)
-                        ClassUtils.forName("com.fasterxml.jackson.datatype.jdk8.Jdk8Module", classLoader);
+                    ClassUtils.forName("com.fasterxml.jackson.datatype.jdk8.Jdk8Module", classLoader);
                 objectMapper.registerModule(instantiateClass(jdk8Module));
             } catch (ClassNotFoundException ex) {
                 // jackson-datatype-jdk8 not available
@@ -39,7 +39,7 @@ public final class ObjectMappingUtils {
         if (ClassUtils.isPresent("java.time.LocalDate", classLoader)) {
             try {
                 Class<? extends Module> javaTimeModule = (Class<? extends Module>)
-                        ClassUtils.forName("com.fasterxml.jackson.datatype.jsr310.JavaTimeModule", classLoader);
+                    ClassUtils.forName("com.fasterxml.jackson.datatype.jsr310.JavaTimeModule", classLoader);
                 objectMapper.registerModule(instantiateClass(javaTimeModule));
             } catch (ClassNotFoundException ex) {
                 // jackson-datatype-jsr310 not available
@@ -50,7 +50,7 @@ public final class ObjectMappingUtils {
         if (ClassUtils.isPresent("kotlin.Unit", classLoader)) {
             try {
                 Class<? extends Module> kotlinModule = (Class<? extends Module>)
-                        ClassUtils.forName("com.fasterxml.jackson.module.kotlin.KotlinModule", classLoader);
+                    ClassUtils.forName("com.fasterxml.jackson.module.kotlin.KotlinModule", classLoader);
                 objectMapper.registerModule(instantiateClass(kotlinModule));
             } catch (ClassNotFoundException ex) {
                 // jackson-module-kotlin not available

@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SnsConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(SnsConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(SnsConfiguration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -30,14 +30,14 @@ class SnsConfigurationTest {
         @Test
         void noAwsEnvironmentRegionConfigured() {
             contextRunner
-                    .run((context) -> assertThat_creationOfAmazonSns_fails(context));
+                .run((context) -> assertThat_creationOfAmazonSns_fails(context));
         }
 
         private void assertThat_creationOfAmazonSns_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'amazonSns'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'amazonSns'");
         }
     }
 
@@ -48,16 +48,16 @@ class SnsConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSns_isCreated(context, "eu-west-1", null));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSns_isCreated(context, "eu-west-1", null));
         }
 
         @Test
         void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.sns.region=us-east-1")
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonSns_isCreated(context, "us-east-1", null));
+                .withPropertyValues("aws.sns.region=us-east-1")
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonSns_isCreated(context, "us-east-1", null));
         }
 
         @Test
@@ -89,8 +89,8 @@ class SnsConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
     }

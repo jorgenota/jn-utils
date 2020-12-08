@@ -20,6 +20,7 @@
         <module>jn-starter-aws-ses</module>
         <module>jn-starter-aws-sns</module>
         <module>jn-starter-aws-sqs</module>
+        <module>jn-aws-integration-test</module>
     </modules>
 
 </project>

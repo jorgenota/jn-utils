@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class KinesisConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(KinesisConfiguration.class));
+        .withConfiguration(AutoConfigurations.of(KinesisConfiguration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -30,14 +30,14 @@ class KinesisConfigurationTest {
         @Test
         void noAwsEnvironmentRegionConfigured() {
             contextRunner
-                    .run((context) -> assertThat_creationOfAmazonKinesis_fails(context));
+                .run((context) -> assertThat_creationOfAmazonKinesis_fails(context));
         }
 
         private void assertThat_creationOfAmazonKinesis_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'amazonKinesis'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'amazonKinesis'");
         }
     }
 
@@ -48,16 +48,16 @@ class KinesisConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_AmazonKinesis_isCreated(context, "eu-west-1", null));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_AmazonKinesis_isCreated(context, "eu-west-1", null));
         }
 
         @Test
         void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.kinesis.region=us-east-1")
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_AmazonKinesis_isCreated(context, "us-east-1", null));
+                .withPropertyValues("aws.kinesis.region=us-east-1")
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_AmazonKinesis_isCreated(context, "us-east-1", null));
         }
 
         @Test
@@ -89,8 +89,8 @@ class KinesisConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
     }

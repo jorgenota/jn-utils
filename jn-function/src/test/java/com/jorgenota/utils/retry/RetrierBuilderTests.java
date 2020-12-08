@@ -93,8 +93,8 @@ class RetrierBuilderTests {
         final CountDownLatch latch = new CountDownLatch(1);
         Runnable r = () -> {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.fixedWait(1000L))
-                    .build();
+                .withWaitStrategy(WaitStrategies.fixedWait(1000L))
+                .build();
             try {
                 retrier.call(alwaysNull(latch));
                 failBecauseExceptionWasNotThrown(SleepInterruptedException.class);
@@ -127,8 +127,8 @@ class RetrierBuilderTests {
         try {
             //noinspection ConstantConditions
             RetrierBuilder.<Void>newBuilder()
-                    .withStopStrategy(null)
-                    .build();
+                .withStopStrategy(null)
+                .build();
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (NullPointerException exception) {
             assertThat(exception.getMessage()).contains("stopStrategy may not be null");
@@ -140,8 +140,8 @@ class RetrierBuilderTests {
         try {
             //noinspection ConstantConditions
             RetrierBuilder.<Void>newBuilder()
-                    .withWaitStrategy(null)
-                    .build();
+                .withWaitStrategy(null)
+                .build();
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (NullPointerException exception) {
             assertThat(exception.getMessage()).contains("waitStrategy may not be null");
@@ -234,8 +234,8 @@ class RetrierBuilderTests {
         @Test
         void testWithFixedWaitStrategy() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.fixedWait(50L))
-                    .build();
+                .withWaitStrategy(WaitStrategies.fixedWait(50L))
+                .build();
             long start = System.currentTimeMillis();
             int result = retrier.call(callableWorksAfter5Attempts);
             // Waits 50 * 5 millis
@@ -246,8 +246,8 @@ class RetrierBuilderTests {
         @Test
         void testWithIncrementingWaitStrategy() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.incrementingWait(10L, 10L))
-                    .build();
+                .withWaitStrategy(WaitStrategies.incrementingWait(10L, 10L))
+                .build();
             long start = System.currentTimeMillis();
             int result = retrier.call(callableWorksAfter5Attempts);
             // Waits 10 + 20 + 30 + 40 + 50
@@ -258,8 +258,8 @@ class RetrierBuilderTests {
         @Test
         void testWithStopAfterAttemptStrategy() {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withStopStrategy(StopStrategies.stopAfterAttempt(3))
-                    .build();
+                .withStopStrategy(StopStrategies.stopAfterAttempt(3))
+                .build();
             try {
                 retrier.call(callableWorksAfter5Attempts);
                 failBecauseExceptionWasNotThrown(ExhaustedRetryException.class);
@@ -274,9 +274,9 @@ class RetrierBuilderTests {
         @Test
         void testWithStopAfterDelayStrategy() {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.fixedWait(50L))
-                    .withStopStrategy(StopStrategies.stopAfterDelay(300L))
-                    .build();
+                .withWaitStrategy(WaitStrategies.fixedWait(50L))
+                .withStopStrategy(StopStrategies.stopAfterDelay(300L))
+                .build();
             long start = System.currentTimeMillis();
             try {
                 retrier.call(callableWorksAfter11Attempts);
@@ -291,10 +291,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfRuntimeException() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfRuntimeException()
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfRuntimeException()
+                .build();
             // callableWorksAfter5Attempts fails with IOException, so the retrier will keep retrying
             int result = retrier.call(callableWorksAfter5Attempts);
             assertThat(result).isEqualTo(5);
@@ -304,10 +304,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfNullPointerException() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfExceptionOfType(NullPointerException.class)
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfExceptionOfType(NullPointerException.class)
+                .build();
             // callableWorksAfter5Attempts fails with IOException, so the retrier will keep retrying
             int result = retrier.call(callableWorksAfter5Attempts);
             assertThat(result).isEqualTo(5);
@@ -317,10 +317,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfFalseExceptionPredicate() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfException(x -> false)
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfException(x -> false)
+                .build();
             // exception predicate is false, so the retrier will keep retrying
             int result = retrier.call(callableWorksAfter5Attempts);
             assertThat(result).isEqualTo(5);
@@ -330,10 +330,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfTrueExceptionPredicate() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfException(x -> x instanceof IOException)
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfException(x -> x instanceof IOException)
+                .build();
             try {
                 // exception predicate is false, so the retrier will fail
                 retrier.call(callableWorksAfter5Attempts);
@@ -346,10 +346,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfException() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfException()
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfException()
+                .build();
             try {
                 // callableWorksAfter5Attempts fails with IOException, so the retrier will fail
                 retrier.call(callableWorksAfter5Attempts);
@@ -362,10 +362,10 @@ class RetrierBuilderTests {
         @Test
         void testWithFailIfIOException() throws RetryException {
             Retrier retrier = RetrierBuilder.newBuilder()
-                    .withWaitStrategy(WaitStrategies.noWait())
-                    .withStopStrategy(StopStrategies.neverStop())
-                    .failIfExceptionOfType(IOException.class)
-                    .build();
+                .withWaitStrategy(WaitStrategies.noWait())
+                .withStopStrategy(StopStrategies.neverStop())
+                .failIfExceptionOfType(IOException.class)
+                .build();
             try {
                 // callableWorksAfter5Attempts fails with IOException, so the retrier will fail
                 retrier.call(callableWorksAfter5Attempts);

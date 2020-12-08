@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class S3ConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(S3Configuration.class));
+        .withConfiguration(AutoConfigurations.of(S3Configuration.class));
 
     @Nested
     @DisplayName("Cases when context refreshing fails...")
@@ -30,14 +30,14 @@ class S3ConfigurationTest {
         @Test
         void noAwsEnvironmentRegionConfigured() {
             contextRunner
-                    .run((context) -> assertThat_creationOfAmazonS3_fails(context));
+                .run((context) -> assertThat_creationOfAmazonS3_fails(context));
         }
 
         private void assertThat_creationOfAmazonS3_fails(AssertableApplicationContext context) {
             assertThat(context)
-                    .getFailure()
-                    .isInstanceOf(BeanCreationException.class)
-                    .hasMessageContaining("Error creating bean with name 'amazonS3'");
+                .getFailure()
+                .isInstanceOf(BeanCreationException.class)
+                .hasMessageContaining("Error creating bean with name 'amazonS3'");
         }
     }
 
@@ -48,16 +48,16 @@ class S3ConfigurationTest {
         @Test
         void awsEnvironmentRegionConfigured() {
             contextRunner
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-1", null));
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-1", null));
         }
 
         @Test
         void awsEnvironmentRegionConfigured_customRegionConfigured() {
             contextRunner
-                    .withPropertyValues("aws.s3.region=eu-west-2")
-                    .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                    .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-2", null));
+                .withPropertyValues("aws.s3.region=eu-west-2")
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .run((context) -> assertThat_amazonS3_isCreated(context, "eu-west-2", null));
         }
 
         @Test
@@ -89,8 +89,8 @@ class S3ConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", null);
             } else {
                 amazonSesAbstractObjectAssert
-                        .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
-                        .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
+                    .hasFieldOrPropertyWithValue("endpoint", TestUtils.toURI(configuredEndpoint))
+                    .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
 
