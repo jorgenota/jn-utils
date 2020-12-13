@@ -1,5 +1,6 @@
 package com.jorgenota.utils.springboot.aws.kinesis.autoconfigure;
 
+import com.amazonaws.Protocol;
 import com.amazonaws.services.kinesis.AmazonKinesisAsync;
 import com.jorgenota.utils.springboot.aws.testsupport.IrelandRegionAwsEnvironmentConfiguration;
 import com.jorgenota.utils.springboot.aws.testsupport.TestUtils;
@@ -69,13 +70,14 @@ class KinesisConfigurationTest {
         }
 
         @Test
-        void awsEnvironmentRegionConfigured_customMaxConnectionsConfigured() {
+        void awsEnvironmentRegionConfigured_customMaxConnectionsAndProtocolConfigured() {
             contextRunner
                 .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
-                .withPropertyValues("aws.kinesis.config.maxConnections=11")
+                .withPropertyValues("aws.kinesis.config.maxConnections=11", "aws.kinesis.config.protocol=HTTPS")
                 .run((context) -> assertThat(context)
                     .getBean("amazonKinesis", AmazonKinesisAsync.class)
-                    .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11));
+                    .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11)
+                    .hasFieldOrPropertyWithValue("clientConfiguration.protocol", Protocol.HTTPS));
         }
 
         private void assertThat_AmazonKinesis_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
