@@ -12,5 +12,5 @@ The following properties are used to autoconfigure the `AwsEnvironment`
 | Property               | Description                                                                | Default value  |
 | ---------------------- | -------------------------------------------------------------------------- | -------------- |
 | aws.kinesis.region | Custom region for the Kinesis client. If not set, default region provided by `awsEnvironment` will be used (recommended) | |
-| aws.kinesis.endpoint  | Service endpoint to use when building the Kinesis client, in case the user needs to set a specific one.  | |
-| aws.kinesis.config.&lt;property&gt;  |  All the additional properties to configure the AWS client if you need to modify its default values. Read [documentarion of AWSClientProperties.Config](../jn-aws-autoconfigure/README.md#awsclientproperties-doc)  | |
+| aws.kinesis.endpoint | Service endpoint to use when building the Kinesis client, in case the user needs to set a specific one | |
+| aws.kinesis.config.&lt;property&gt; | All the additional properties to configure the AWS client if you need to modify its default values. Read [documentation of AWSClientProperties.Config](../jn-aws-autoconfigure/README.md#awsclientproperties-doc) | |

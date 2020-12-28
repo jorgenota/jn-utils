@@ -78,6 +78,29 @@ class S3ConfigurationTest {
                     .hasFieldOrPropertyWithValue("clientConfiguration.maxConnections", 11));
         }
 
+        @Test
+        void awsEnvironmentRegionConfigured_customClientOptions() {
+            contextRunner
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.s3.pathStyleAccess=true")
+                .withPropertyValues("aws.s3.chunkedEncodingDisabled=true")
+                .withPropertyValues("aws.s3.payloadSigningEnabled=true")
+                .withPropertyValues("aws.s3.dualstackEnabled=true")
+                .run((context) -> assertThat(context)
+                    .getBean("amazonS3", AmazonS3.class)
+                    .hasFieldOrPropertyWithValue("clientOptions.pathStyleAccess", true)
+                    .hasFieldOrPropertyWithValue("clientOptions.chunkedEncodingDisabled", true)
+                    .hasFieldOrPropertyWithValue("clientOptions.payloadSigningEnabled", true)
+                    .hasFieldOrPropertyWithValue("clientOptions.dualstackEnabled", true));
+
+            contextRunner
+                .withUserConfiguration(IrelandRegionAwsEnvironmentConfiguration.class)
+                .withPropertyValues("aws.s3.accelerateModeEnabled=true")
+                .run((context) -> assertThat(context)
+                    .getBean("amazonS3", AmazonS3.class)
+                    .hasFieldOrPropertyWithValue("clientOptions.accelerateModeEnabled", true));
+        }
+
         private void assertThat_amazonS3_isCreated(AssertableApplicationContext context, String configuredRegion, @Nullable String configuredEndpoint) {
             AbstractObjectAssert<?, AmazonS3> amazonSesAbstractObjectAssert = assertThat(context)
                 .getBean("amazonS3", AmazonS3.class)
@@ -93,6 +116,5 @@ class S3ConfigurationTest {
                     .hasFieldOrPropertyWithValue("signerRegionOverride", configuredRegion);
             }
         }
-
     }
 }

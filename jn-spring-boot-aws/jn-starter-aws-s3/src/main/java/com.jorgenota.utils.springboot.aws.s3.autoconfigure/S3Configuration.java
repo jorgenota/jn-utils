@@ -20,6 +20,23 @@ public class S3Configuration {
     public AmazonS3 amazonS3(S3ConfigurationProperties config, AwsEnvironment awsEnvironment) {
         AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard();
         awsEnvironment.configureAwsClientBuilder(builder, config, null);
+
+        if (config.getPathStyleAccess() != null) {
+            builder.setPathStyleAccessEnabled(config.getPathStyleAccess());
+        }
+        if ((config.getChunkedEncodingDisabled() != null) && config.getChunkedEncodingDisabled()) {
+            builder.disableChunkedEncoding();
+        }
+        if (config.getAccelerateModeEnabled() != null) {
+            builder.setAccelerateModeEnabled(config.getAccelerateModeEnabled());
+        }
+        if (config.getPayloadSigningEnabled() != null) {
+            builder.setPayloadSigningEnabled(config.getPayloadSigningEnabled());
+        }
+        if ((config.getDualstackEnabled() != null) && config.getDualstackEnabled()) {
+            builder.enableDualstack();
+        }
+
         return builder.build();
     }
 }

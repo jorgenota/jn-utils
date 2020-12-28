@@ -59,22 +59,25 @@ class MainIT {
 
         @Test
         public void testS3() {
-            assertThat(amazonS3).isNotNull();
 
-//            assertThat(amazonS3.listBuckets()).isEmpty();
-//            AmazonS3 client = TestUtils.getClientS3();
-//            client.createBucket("bucket2");
-//
-//            String bucketName = "bucket1";
-//            String key = "key1";
-//            String data = "{}";
-//            amazonS3.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).build());
-//            amazonS3.createBucket(bucketName);
-//            amazonS3.putObject(bucketName, key, data);
-//            assertThat(amazonS3.listBuckets()).hasSize(1);
-//
-//            amazonS3.deleteBucket(bucketName);
-//            assertThat(amazonS3.listBuckets()).isEmpty();
+            String bucketName = "bucket1";
+            String key = "key1";
+            String data = "{}";
+
+            assertThat(amazonS3).isNotNull();
+            assertThat(amazonS3.listBuckets()).isEmpty();
+
+            amazonS3.createBucket(bucketName);
+            assertThat(amazonS3.listBuckets()).hasSize(1);
+
+            amazonS3.putObject(bucketName, key, data);
+            assertThat(amazonS3.getObjectAsString(bucketName, key)).isEqualTo(data);
+
+            amazonS3.deleteObject(bucketName, key);
+            assertThat(amazonS3.doesObjectExist(bucketName, key)).isFalse();
+
+            amazonS3.deleteBucket(bucketName);
+            assertThat(amazonS3.listBuckets()).isEmpty();
         }
     }
 
